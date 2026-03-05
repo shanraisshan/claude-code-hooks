@@ -43,7 +43,7 @@ new hook addition changelogs only
 
 | Date | Hooks | Changes | Claude Code Version | Demo |
 |------|:-----:|---------|:-------------------:|:----:|
-| Mar 4, 2026 | 19 | Added `InstructionsLoaded` | [v2.1.69](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2169) | |
+| Mar 5, 2026 | 19 | Added `InstructionsLoaded` | [v2.1.69](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2169) | |
 | Feb 21, 2026 | 18 | Added `WorktreeCreate` and `WorktreeRemove` | [v2.1.50](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2150) | |
 | Feb 20, 2026 | 16 | Added `ConfigChange` | [v2.1.49](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2149) | |
 | Feb 6, 2026 | 15 | Added `TeammateIdle` and `TaskCompleted` | [v2.1.33](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2133) | |
@@ -75,3 +75,7 @@ new hook addition changelogs only
 
 - [Claude Code Voice Hooks](https://github.com/shanraisshan/claude-code-voice-hooks)
 - [Codex CLI Voice Hooks](https://github.com/shanraisshan/codex-cli-voice-hooks)
+
+---
+
+<table width="100%"><tr><td align="left"><a href="https://github.com/shanraisshan/claude-code-best-practice">← Back to Claude Code Best Practice</a></td><td align="right"><img src="!/claude-jumping.svg" alt="Claude jumping" width="60" height="54"></td></tr></table>
