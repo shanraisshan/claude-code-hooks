@@ -252,3 +252,17 @@
 |---|----------|------|--------|--------|
 | 1 | LOW | Schema Discovery | Elicitation/ElicitationResult hidden hooks in schema — monitor | ✋ ON HOLD (recurring since 2026-03-04; waiting for official documentation) |
 | 2 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-03-14 08:59 AM PKT] Claude Code v2.1.76
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | HIGH | New Hook | `/workflows:workflow-add-hook PostCompact` — new in v2.1.76, fires after context compaction | ✅ COMPLETE (added to all files except settings.json — blocked by v2.1.75 schema; will add after Claude Code update) |
+| 2 | HIGH | New Hook | `/workflows:workflow-add-hook Elicitation` — new in v2.1.76, MCP server user input request | ✅ COMPLETE (added to all 11 files) |
+| 3 | HIGH | New Hook | `/workflows:workflow-add-hook ElicitationResult` — new in v2.1.76, user response to MCP elicitation | ✅ COMPLETE (added to all 11 files) |
+| 4 | MEDIUM | Doc Fix | Update HOOKS-README "Not in Docs" Setup note: "18 hooks listed" → "21 hooks listed" | ✅ COMPLETE (updated to 21) |
+| 5 | MEDIUM | Decision Control | Add Elicitation/ElicitationResult to HOOKS-README Decision Control table (both can block) | ✅ COMPLETE (added both rows) |
+| 6 | LOW | Config Drift | Fix Setup sound file naming: `Setup.mp3` → `setup.mp3` for Linux case-sensitivity | ✅ COMPLETE (renamed to lowercase) |
+| 7 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |

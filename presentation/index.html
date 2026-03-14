@@ -540,7 +540,7 @@
         </div>
         <h1>Claude Code Voice Hooks</h1>
         <p class="subtitle">Explaining Claude Code Voice Hooks and Subagent Hooks</p>
-        <p style="margin-top: 60px; font-size: 0.95rem; color: #888;">As of Claude Code v2.1.75 | March 14, 2026</p>
+        <p style="margin-top: 60px; font-size: 0.95rem; color: #888;">As of Claude Code v2.1.76 | March 14, 2026</p>
     </div>
 
     <!-- Slide 2: Introduction -->
@@ -557,8 +557,8 @@
             <div class="use-case-item">
                 <span class="use-case-icon">🔢</span>
                 <div class="use-case-text">
-                    <strong>19 Hooks Explained</strong>
-                    <span>Claude Code currently supports 19 hooks (as of v2.1.75)</span>
+                    <strong>22 Hooks Explained</strong>
+                    <span>Claude Code currently supports 22 hooks (as of v2.1.76)</span>
                 </div>
             </div>
             <div class="use-case-item">
@@ -579,7 +579,7 @@
                 <span class="use-case-icon">🔊</span>
                 <div class="use-case-text">
                     <strong>Voice Notifications Demo</strong>
-                    <span>This repo integrates all 19 hooks with audio feedback</span>
+                    <span>This repo integrates all 22 hooks with audio feedback</span>
                 </div>
             </div>
         </div>
@@ -595,8 +595,8 @@
 
     <!-- Slide 3: Table of Contents -->
     <div class="slide" data-slide="3">
-        <h1>The 19 Hooks</h1>
-        <p style="margin-top: -30px; margin-bottom: 24px; font-size: 1rem; color: #666;">Claude Code v2.1.75 | March 14, 2026 — More hooks may be added in future versions.</p>
+        <h1>The 22 Hooks</h1>
+        <p style="margin-top: -30px; margin-bottom: 24px; font-size: 1rem; color: #666;">Claude Code v2.1.76 | March 14, 2026 — More hooks may be added in future versions.</p>
 
         <div class="toc-list">
             <div class="toc-item" onclick="goToSlide(5)">
@@ -645,35 +645,47 @@
             </div>
             <div class="toc-item" onclick="goToSlide(16)">
                 <span class="toc-number">12</span>
-                <span class="toc-name">SessionEnd</span>
+                <span class="toc-name">PostCompact</span>
             </div>
             <div class="toc-item" onclick="goToSlide(17)">
                 <span class="toc-number">13</span>
-                <span class="toc-name">Setup</span>
+                <span class="toc-name">SessionEnd</span>
             </div>
             <div class="toc-item" onclick="goToSlide(18)">
                 <span class="toc-number">14</span>
-                <span class="toc-name">TeammateIdle</span>
+                <span class="toc-name">Setup</span>
             </div>
             <div class="toc-item" onclick="goToSlide(19)">
                 <span class="toc-number">15</span>
-                <span class="toc-name">TaskCompleted</span>
+                <span class="toc-name">TeammateIdle</span>
             </div>
             <div class="toc-item" onclick="goToSlide(20)">
                 <span class="toc-number">16</span>
-                <span class="toc-name">ConfigChange</span>
+                <span class="toc-name">TaskCompleted</span>
             </div>
             <div class="toc-item" onclick="goToSlide(21)">
                 <span class="toc-number">17</span>
-                <span class="toc-name">WorktreeCreate</span>
+                <span class="toc-name">ConfigChange</span>
             </div>
             <div class="toc-item" onclick="goToSlide(22)">
                 <span class="toc-number">18</span>
-                <span class="toc-name">WorktreeRemove</span>
+                <span class="toc-name">WorktreeCreate</span>
             </div>
             <div class="toc-item" onclick="goToSlide(23)">
                 <span class="toc-number">19</span>
+                <span class="toc-name">WorktreeRemove</span>
+            </div>
+            <div class="toc-item" onclick="goToSlide(24)">
+                <span class="toc-number">20</span>
                 <span class="toc-name">InstructionsLoaded</span>
+            </div>
+            <div class="toc-item" onclick="goToSlide(25)">
+                <span class="toc-number">21</span>
+                <span class="toc-name">Elicitation</span>
+            </div>
+            <div class="toc-item" onclick="goToSlide(26)">
+                <span class="toc-number">22</span>
+                <span class="toc-name">ElicitationResult</span>
             </div>
         </div>
     </div>
@@ -731,6 +743,11 @@
                 <span style="margin-left: 16px; color: #666;">If context needs compaction</span>
             </div>
             <div class="lifecycle-step">
+                <span class="lifecycle-arrow">↓</span>
+                <span class="lifecycle-label">PostCompact</span>
+                <span style="margin-left: 16px; color: #666;">After compaction completes</span>
+            </div>
+            <div class="lifecycle-step">
                 <span class="lifecycle-arrow">→</span>
                 <span class="lifecycle-label highlight">SessionEnd</span>
                 <span style="margin-left: 16px; color: #666;">Session terminates</span>
@@ -745,11 +762,13 @@
                     <span class="matcher-tag">WorktreeCreate</span>
                     <span class="matcher-tag">WorktreeRemove</span>
                     <span class="matcher-tag">InstructionsLoaded</span>
+                    <span class="matcher-tag">Elicitation</span>
+                    <span class="matcher-tag">ElicitationResult</span>
                 </div>
             </div>
         </div>
 
-        <p style="margin-top: 24px;"><strong>Note:</strong> Setup fires separately via <code>--init</code>/<code>--maintenance</code> CLI flags. Notification, TeammateIdle, TaskCompleted, ConfigChange, WorktreeCreate, WorktreeRemove, and InstructionsLoaded hooks fire asynchronously at any point during the session — they are not part of the sequential flow above.</p>
+        <p style="margin-top: 24px;"><strong>Note:</strong> Setup fires separately via <code>--init</code>/<code>--maintenance</code> CLI flags. Notification, TeammateIdle, TaskCompleted, ConfigChange, WorktreeCreate, WorktreeRemove, InstructionsLoaded, Elicitation, and ElicitationResult hooks fire asynchronously at any point during the session — they are not part of the sequential flow above.</p>
     </div>
 
     <!-- Slide 5: SessionStart -->
@@ -1441,10 +1460,73 @@
         </div>
     </div>
 
-    <!-- Slide 16: SessionEnd -->
+    <!-- Slide 16: PostCompact -->
     <div class="slide" data-slide="16">
         <div class="hook-title">
             <span class="hook-number">12</span>
+            <span class="hook-name">PostCompact</span>
+            <span class="cannot-block">Cannot Block</span>
+        </div>
+
+        <div class="trigger-box">
+            <h4>When It Triggers</h4>
+            <p>After context compaction completes — either automatically when context window fills up, or after user runs <code>/compact</code>. Use this to react to the new compacted state.</p>
+        </div>
+
+        <div class="how-to-trigger">
+            <h4>How to Trigger</h4>
+            <p>Fires automatically after any compaction:</p>
+            <div class="trigger-example">&gt; /compact &nbsp;&nbsp;&nbsp;← Triggers PreCompact then PostCompact</div>
+            <p style="margin-top: 12px;">Or automatically after auto-compact when context window fills up.</p>
+        </div>
+
+        <div class="matcher-values">
+            <strong>Trigger Types:</strong>
+            <span class="matcher-tag">manual</span>
+            <span class="matcher-tag">auto</span>
+        </div>
+
+        <h3>Use Cases</h3>
+        <div class="use-cases">
+            <div class="use-case-item">
+                <span class="use-case-icon">🔊</span>
+                <div class="use-case-text">
+                    <strong>Voice: "Context compacted"</strong>
+                    <span>Audio confirmation that compaction finished</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">📋</span>
+                <div class="use-case-text">
+                    <strong>Log Compact Summary</strong>
+                    <span>Save the generated conversation summary for audit</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">🔄</span>
+                <div class="use-case-text">
+                    <strong>Update External State</strong>
+                    <span>Sync external tools with the new compacted context</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">📊</span>
+                <div class="use-case-text">
+                    <strong>Track Compaction Frequency</strong>
+                    <span>Monitor how often context fills up and gets compressed</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sound-demo">
+            🔊 Sound: postcompact.wav — "Context compacted"
+        </div>
+    </div>
+
+    <!-- Slide 17: SessionEnd -->
+    <div class="slide" data-slide="17">
+        <div class="hook-title">
+            <span class="hook-number">13</span>
             <span class="hook-name">SessionEnd</span>
             <span class="cannot-block">Cannot Block</span>
         </div>
@@ -1508,10 +1590,10 @@
         </div>
     </div>
 
-    <!-- Slide 17: Setup -->
-    <div class="slide" data-slide="17">
+    <!-- Slide 18: Setup -->
+    <div class="slide" data-slide="18">
         <div class="hook-title">
-            <span class="hook-number">13</span>
+            <span class="hook-number">14</span>
             <span class="hook-name">Setup</span>
             <span class="cannot-block">Cannot Block</span>
         </div>
@@ -1565,10 +1647,10 @@
         </div>
     </div>
 
-    <!-- Slide 18: TeammateIdle -->
-    <div class="slide" data-slide="18">
+    <!-- Slide 19: TeammateIdle -->
+    <div class="slide" data-slide="19">
         <div class="hook-title">
-            <span class="hook-number">14</span>
+            <span class="hook-number">15</span>
             <span class="hook-name">TeammateIdle</span>
             <span class="can-block">Can Block</span>
         </div>
@@ -1622,10 +1704,10 @@
         </div>
     </div>
 
-    <!-- Slide 19: TaskCompleted -->
-    <div class="slide" data-slide="19">
+    <!-- Slide 20: TaskCompleted -->
+    <div class="slide" data-slide="20">
         <div class="hook-title">
-            <span class="hook-number">15</span>
+            <span class="hook-number">16</span>
             <span class="hook-name">TaskCompleted</span>
             <span class="can-block">Can Block</span>
         </div>
@@ -1679,10 +1761,10 @@
         </div>
     </div>
 
-    <!-- Slide 20: ConfigChange -->
-    <div class="slide" data-slide="20">
+    <!-- Slide 21: ConfigChange -->
+    <div class="slide" data-slide="21">
         <div class="hook-title">
-            <span class="hook-number">16</span>
+            <span class="hook-number">17</span>
             <span class="hook-name">ConfigChange</span>
             <span class="can-block">Can Block</span>
         </div>
@@ -1746,10 +1828,10 @@
         </div>
     </div>
 
-    <!-- Slide 21: WorktreeCreate -->
-    <div class="slide" data-slide="21">
+    <!-- Slide 22: WorktreeCreate -->
+    <div class="slide" data-slide="22">
         <div class="hook-title">
-            <span class="hook-number">17</span>
+            <span class="hook-number">18</span>
             <span class="hook-name">WorktreeCreate</span>
             <span class="can-block">Can Block</span>
         </div>
@@ -1803,10 +1885,10 @@
         </div>
     </div>
 
-    <!-- Slide 22: WorktreeRemove -->
-    <div class="slide" data-slide="22">
+    <!-- Slide 23: WorktreeRemove -->
+    <div class="slide" data-slide="23">
         <div class="hook-title">
-            <span class="hook-number">18</span>
+            <span class="hook-number">19</span>
             <span class="hook-name">WorktreeRemove</span>
             <span class="cannot-block">Cannot Block</span>
         </div>
@@ -1860,10 +1942,10 @@
         </div>
     </div>
 
-    <!-- Slide 23: InstructionsLoaded -->
-    <div class="slide" data-slide="23">
+    <!-- Slide 24: InstructionsLoaded -->
+    <div class="slide" data-slide="24">
         <div class="hook-title">
-            <span class="hook-number">19</span>
+            <span class="hook-number">20</span>
             <span class="hook-name">InstructionsLoaded</span>
             <span class="cannot-block">Cannot Block</span>
         </div>
@@ -1917,14 +1999,122 @@
         </div>
     </div>
 
-    <!-- Slide 24: Agent Hooks -->
-    <div class="slide" data-slide="24">
+    <!-- Slide 25: Elicitation -->
+    <div class="slide" data-slide="25">
+        <div class="hook-title">
+            <span class="hook-number">21</span>
+            <span class="hook-name">Elicitation</span>
+            <span class="can-block">Can Block</span>
+        </div>
+
+        <div class="trigger-box">
+            <h4>When It Triggers</h4>
+            <p>When an MCP server requests user input during a tool call. Allows you to intercept, modify, or block elicitation requests before the user sees them.</p>
+        </div>
+
+        <div class="how-to-trigger">
+            <h4>How to Trigger</h4>
+            <p>Use an MCP server that sends elicitation requests (e.g. <code>@blizzy/mcp-elicit</code>):</p>
+            <div class="trigger-example">"Use the elicit_boolean tool to ask me if I like pizza" → Elicitation hook fires</div>
+        </div>
+
+        <div class="matcher-values">
+            <strong>Matcher:</strong>
+            <span class="matcher-tag">MCP server name</span>
+        </div>
+
+        <h3>Use Cases</h3>
+        <div class="use-cases">
+            <div class="use-case-item">
+                <span class="use-case-icon">🔊</span>
+                <div class="use-case-text">
+                    <strong>Voice: "MCP input requested"</strong>
+                    <span>Audio alert when an MCP server needs user input</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">🛡️</span>
+                <div class="use-case-text">
+                    <strong>Filter Sensitive Requests</strong>
+                    <span>Block or modify elicitation requests from untrusted servers</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">📝</span>
+                <div class="use-case-text">
+                    <strong>Audit MCP Interactions</strong>
+                    <span>Log all elicitation requests for compliance tracking</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sound-demo">
+            🔊 Sound: elicitation.wav — "MCP input requested"
+        </div>
+    </div>
+
+    <!-- Slide 26: ElicitationResult -->
+    <div class="slide" data-slide="26">
+        <div class="hook-title">
+            <span class="hook-number">22</span>
+            <span class="hook-name">ElicitationResult</span>
+            <span class="can-block">Can Block</span>
+        </div>
+
+        <div class="trigger-box">
+            <h4>When It Triggers</h4>
+            <p>After a user responds to an MCP elicitation, before the response is sent back to the server. Allows you to intercept, modify, or block the user's response.</p>
+        </div>
+
+        <div class="how-to-trigger">
+            <h4>How to Trigger</h4>
+            <p>User responds to an MCP elicitation dialog (e.g. the pizza question above):</p>
+            <div class="trigger-example">User clicks Yes/No → ElicitationResult hook fires → Response sent to server</div>
+        </div>
+
+        <div class="matcher-values">
+            <strong>Matcher:</strong>
+            <span class="matcher-tag">MCP server name</span>
+        </div>
+
+        <h3>Use Cases</h3>
+        <div class="use-cases">
+            <div class="use-case-item">
+                <span class="use-case-icon">🔊</span>
+                <div class="use-case-text">
+                    <strong>Voice: "Response submitted"</strong>
+                    <span>Audio confirmation when user responds to an MCP elicitation</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">🔒</span>
+                <div class="use-case-text">
+                    <strong>Sanitize Responses</strong>
+                    <span>Strip sensitive data before it's sent to the MCP server</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">📊</span>
+                <div class="use-case-text">
+                    <strong>Track User Decisions</strong>
+                    <span>Log accept/decline/cancel actions for analytics</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sound-demo">
+            🔊 Sound: elicitationresult.wav — "Response submitted"
+        </div>
+    </div>
+
+    <!-- Slide 27: Agent Hooks -->
+    <div class="slide" data-slide="27">
         <h1>Agent Hooks (Bonus)</h1>
         <p>Claude Code 2.1.0 introduced support for agent-specific hooks defined in agent frontmatter files. These hooks only run within the agent's lifecycle.</p>
 
         <div class="trigger-box">
             <h4>Supported Agent Hooks</h4>
-            <p>Agent frontmatter hooks support <strong>6 of 19 hooks</strong>: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, and SubagentStop.</p>
+            <p>Agent frontmatter hooks support <strong>6 of 22 hooks</strong>: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, and SubagentStop.</p>
         </div>
 
         <div class="how-to-trigger">
@@ -2022,8 +2212,8 @@ hooks:
         </div>
     </div>
 
-    <!-- Slide 25: Configuration -->
-    <div class="slide" data-slide="25">
+    <!-- Slide 28: Configuration -->
+    <div class="slide" data-slide="28">
         <h1>Configuration</h1>
         <p>Hooks are configured in <code>.claude/settings.json</code> and can be individually enabled/disabled.</p>
 
@@ -2064,8 +2254,8 @@ hooks:
         </div>
     </div>
 
-    <!-- Slide 26: Summary -->
-    <div class="slide" data-slide="26">
+    <!-- Slide 29: Summary -->
+    <div class="slide" data-slide="29">
         <h1>Summary</h1>
 
         <div class="info-grid">
@@ -2074,11 +2264,14 @@ hooks:
                 <p><strong>SessionStart</strong> — First hook, loads context</p>
                 <p><strong>SessionEnd</strong> — Last hook, cleanup</p>
                 <p><strong>PreCompact</strong> — Before context compression</p>
+                <p><strong>PostCompact</strong> — After context compression</p>
                 <p><strong>Setup</strong> — Project initialization</p>
                 <p><strong>ConfigChange</strong> — Config file modified</p>
                 <p><strong>WorktreeCreate</strong> — Agent worktree created</p>
                 <p><strong>WorktreeRemove</strong> — Agent worktree removed</p>
                 <p><strong>InstructionsLoaded</strong> — Instructions loaded into context</p>
+                <p><strong>Elicitation</strong> — MCP server requests input</p>
+                <p><strong>ElicitationResult</strong> — User responds to MCP</p>
             </div>
             <div class="info-card">
                 <h4>User Interaction</h4>
@@ -2116,6 +2309,8 @@ hooks:
             <span class="matcher-tag">TaskCompleted</span>
             <span class="matcher-tag">ConfigChange</span>
             <span class="matcher-tag">WorktreeCreate</span>
+            <span class="matcher-tag">Elicitation</span>
+            <span class="matcher-tag">ElicitationResult</span>
         </div>
 
         <div style="margin-top: 40px; padding: 24px; background: #f8f9fa; border-radius: 8px;">
@@ -2185,7 +2380,7 @@ hooks:
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 26;
+        const totalSlides = 29;
 
         function showSlide(n) {
             const slides = document.querySelectorAll('.slide');
