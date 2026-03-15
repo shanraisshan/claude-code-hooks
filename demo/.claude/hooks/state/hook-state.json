@@ -1,9 +1,9 @@
 {
   "hooks": {
     "SessionStart": {
-      "active": true,
-      "last_fired": 1773568551.195312,
-      "fire_count": 1
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
     },
     "UserPromptSubmit": {
       "active": false,
@@ -96,9 +96,9 @@
       "fire_count": 0
     },
     "InstructionsLoaded": {
-      "active": true,
-      "last_fired": 1773568550.676903,
-      "fire_count": 1
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
     },
     "Elicitation": {
       "active": false,
@@ -111,5 +111,5 @@
       "fire_count": 0
     }
   },
-  "last_updated": 1773568551.195313
+  "last_updated": null
 }

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "elicit": {
+      "command": "npx",
+      "args": ["-y", "@blizzy/mcp-elicit"]
+    }
+  }
+}

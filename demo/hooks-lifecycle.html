@@ -4,10 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claude Code Hooks Lifecycle</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 90' width='140' height='126'%3E%3Cstyle%3E.claude-body%7Banimation:jump .5s ease-in-out infinite;transform-origin:center bottom%7D.shadow%7Banimation:shadow-scale .5s ease-in-out infinite%7D.left-arm%7Banimation:wave-left .5s ease-in-out infinite;transform-origin:right center%7D.right-arm%7Banimation:wave-right .5s ease-in-out infinite;transform-origin:left center%7D.left-ear%7Banimation:ear-bounce .5s ease-in-out infinite;transform-origin:center bottom%7D.right-ear%7Banimation:ear-bounce .5s ease-in-out infinite .1s;transform-origin:center bottom%7D@keyframes jump%7B0%25,100%25%7Btransform:translateY(0) scaleY(1) scaleX(1)%7D30%25%7Btransform:translateY(-16px) scaleY(1.1) scaleX(.95)%7D50%25%7Btransform:translateY(-18px) scaleY(1.05) scaleX(.98)%7D80%25%7Btransform:translateY(-5px) scaleY(.95) scaleX(1.05)%7D%7D@keyframes shadow-scale%7B0%25,100%25%7Btransform:scaleX(1);opacity:.25%7D50%25%7Btransform:scaleX(.4);opacity:.08%7D%7D@keyframes wave-left%7B0%25,100%25%7Btransform:rotate(0)%7D50%25%7Btransform:rotate(-25deg)%7D%7D@keyframes wave-right%7B0%25,100%25%7Btransform:rotate(0)%7D50%25%7Btransform:rotate(25deg)%7D%7D@keyframes ear-bounce%7B0%25,100%25%7Btransform:scaleY(1)%7D40%25%7Btransform:scaleY(1.2)%7D60%25%7Btransform:scaleY(.85)%7D%7D%3C/style%3E%3Cellipse class='shadow' cx='50' cy='82' rx='22' ry='5' fill='%23000'/%3E%3Cg class='claude-body'%3E%3Crect class='left-ear' x='22' y='10' width='8' height='14' fill='%23E07C4C'/%3E%3Crect class='right-ear' x='70' y='10' width='8' height='14' fill='%23E07C4C'/%3E%3Crect x='18' y='24' width='64' height='4' fill='%23E07C4C'/%3E%3Crect x='14' y='28' width='72' height='32' fill='%23E07C4C'/%3E%3Crect x='30' y='34' width='8' height='10' fill='%23000'/%3E%3Crect x='62' y='34' width='8' height='10' fill='%23000'/%3E%3Crect class='left-arm' x='2' y='36' width='12' height='8' fill='%23E07C4C'/%3E%3Crect class='right-arm' x='86' y='36' width='12' height='8' fill='%23E07C4C'/%3E%3Crect x='24' y='60' width='12' height='14' fill='%23E07C4C'/%3E%3Crect x='64' y='60' width='12' height='14' fill='%23E07C4C'/%3E%3C/g%3E%3C/svg%3E">
 <style>
   * { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; background: #0d1117; color: #e6edf3; font-family: system-ui, -apple-system, sans-serif; height: 100%; overflow: hidden; }
-  body { display: flex; flex-direction: column; height: 100vh; }
+  html, body { margin: 0; padding: 0; height: 100%; overflow: hidden; font-family: system-ui, -apple-system, sans-serif; }
+  body { display: flex; flex-direction: column; height: 100vh; background: #0d1117; }
 
   header { background: #161b22; border-bottom: 1px solid #30363d; padding: 4px 16px; display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; height: 32px; }
   header h1 { margin: 0; font-size: 14px; color: #e6edf3; }
@@ -19,54 +20,39 @@
   .reset-btn:hover { background: #30363d; }
 
   .main-content { display: flex; flex: 1; overflow: hidden; }
+  .resize-handle { width: 4px; background: #ccc; cursor: col-resize; flex-shrink: 0; transition: background 0.2s; }
+  .resize-handle:hover, .resize-handle.dragging { background: #666; }
 
-  /* ===== RESIZABLE DIVIDER ===== */
-  .resize-handle { width: 5px; background: #30363d; cursor: col-resize; flex-shrink: 0; transition: background 0.2s; }
-  .resize-handle:hover, .resize-handle.dragging { background: #58a6ff; }
+  /* ===== LEFT PANEL (LIGHT) ===== */
+  .left-panel { flex: 1; min-width: 0; overflow-y: auto; padding: 8px 12px; background: #ffffff; color: #111; }
+  .left-panel::-webkit-scrollbar { width: 4px; }
+  .left-panel::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
 
-  /* ===== LEFT PANEL ===== */
-  .left-panel { flex: 1; min-width: 0; overflow-y: auto; padding: 24px 28px; background: #0d1117; }
-  .left-panel::-webkit-scrollbar { width: 6px; }
-  .left-panel::-webkit-scrollbar-track { background: transparent; }
-  .left-panel::-webkit-scrollbar-thumb { background: #30363d; border-radius: 3px; }
+  .prompts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
-  .mascot-section { text-align: center; margin-bottom: 16px; }
-  .mascot-section svg { width: 120px; height: auto; }
-  .project-title { font-size: 22px; font-weight: 700; color: #e6edf3; margin: 8px 0 10px; text-align: center; }
-  .badges { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-  .badge { display: inline-flex; font-size: 11px; border-radius: 4px; overflow: hidden; }
-  .badge-label { background: #555; color: #fff; padding: 2px 7px; }
-  .badge-value { background: #e6edf3; color: #333; padding: 2px 7px; font-weight: 600; }
+  .prompt-card { border: 1px solid #e0e0e0; border-radius: 5px; padding: 8px 12px; }
+  .prompt-header { display: flex; align-items: baseline; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
+  .prompt-step { font-size: 17px; font-weight: 700; color: #111; white-space: nowrap; }
+  .prompt-hooks { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+  .hook-tag { font-size: 13px; font-weight: 500; padding: 2px 8px; border-radius: 8px; background: #f0f0f0; color: #333; border: 1px solid #ddd; }
+  .prompt-code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 16px; color: #111; background: #f6f6f6; border-radius: 4px; padding: 6px 12px; white-space: pre-wrap; line-height: 1.5; }
+  .prompt-code .prefix { color: #999; }
 
-  .divider { height: 1px; background: #30363d; margin: 16px 0; }
+  .bonus-section { border: 1px solid #e0e0e0; border-radius: 6px; padding: 10px 14px; margin-bottom: 8px; }
+  .bonus-title { font-size: 13px; font-weight: 700; color: #555; margin-bottom: 6px; }
+  .bonus-item { font-size: 13px; color: #333; margin-bottom: 5px; line-height: 1.4; display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+  .bonus-item code { font-family: monospace; font-size: 12px; color: #111; background: #f0f0f0; padding: 1px 5px; border-radius: 2px; }
 
-  .section-title { font-size: 16px; font-weight: 700; color: #e6edf3; margin: 0 0 4px; }
-  .section-subtitle { font-size: 12px; color: #8b949e; margin: 0 0 14px; }
+  /* ===== RIGHT PANEL (DARK) ===== */
+  .right-panel { width: 40%; min-width: 30%; display: flex; flex-direction: column; overflow: hidden; position: relative; background: #0d1117; }
 
-  .prompt-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
-  .prompt-step { font-size: 10px; font-weight: 700; color: #8b949e; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-  .prompt-label { font-size: 13px; font-weight: 600; color: #c9d1d9; margin-bottom: 8px; }
-  .prompt-code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; color: #79c0ff; background: #0d1117; border: 1px solid #21262d; border-radius: 4px; padding: 8px 12px; margin-bottom: 10px; white-space: pre-wrap; line-height: 1.5; }
-  .prompt-code .prefix { color: #8b949e; }
-  .prompt-hooks { display: flex; flex-wrap: wrap; gap: 5px; }
-  .hook-tag { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: #21262d; color: #8b949e; border: 1px solid #30363d; }
-  .hook-tag.core { background: #1a2a1a; color: #3fb950; border-color: #238636; }
-  .hook-tag.tool { background: #2a2410; color: #d29922; border-color: #9e6a03; }
-  .hook-tag.agent { background: #1a1a2e; color: #a371f7; border-color: #8957e5; }
-  .hook-tag.lifecycle { background: #2a1a1a; color: #f85149; border-color: #da3633; }
-  .hook-tag.side { background: #1a2a2a; color: #58a6ff; border-color: #388bfd; }
+  .right-branding { position: absolute; top: 4px; right: 8px; display: flex; flex-direction: column; align-items: center; z-index: 5; }
+  .right-branding svg { width: 90px; height: auto; }
+  .right-branding-text { font-size: 11px; font-weight: 600; color: #8b949e; text-align: center; line-height: 1.3; margin-top: 4px; }
+  .right-branding-text strong { color: #e6edf3; font-size: 13px; display: block; }
 
-  .prompt-note { font-size: 11px; color: #6e7681; margin-top: 6px; font-style: italic; }
-
-  .bonus-section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 14px 16px; margin-bottom: 12px; }
-  .bonus-title { font-size: 12px; font-weight: 700; color: #8b949e; margin-bottom: 8px; }
-  .bonus-item { font-size: 12px; color: #c9d1d9; margin-bottom: 6px; line-height: 1.4; }
-  .bonus-item code { font-family: monospace; font-size: 11px; color: #79c0ff; background: #0d1117; padding: 1px 5px; border-radius: 3px; }
-  .bonus-item .hook-tag { font-size: 9px; vertical-align: middle; }
-
-  /* ===== RIGHT PANEL ===== */
-  .right-panel { width: 50%; min-width: 40%; display: flex; justify-content: center; align-items: center; padding: 4px; overflow: hidden; position: relative; }
-  .right-panel svg { height: calc(100vh - 40px); width: auto; max-width: 100%; }
+  .chart-container { flex: 1; display: flex; justify-content: center; align-items: center; padding: 0 4px 4px; overflow: hidden; }
+  .chart-container svg { height: 100%; width: auto; max-width: 100%; }
 
   .hook-rect { fill: #161b22; stroke: #30363d; stroke-width: 1.5; transition: all 0.5s ease; }
   .hook-rect.lit { fill: #FFD700; stroke: #FFA500; filter: url(#glow); }
@@ -85,14 +71,13 @@
   .arrow-dashed { stroke-dasharray: 5 3; }
   .resume-label { fill: #484f58; font-family: system-ui, -apple-system, sans-serif; font-size: 9px; font-style: italic; }
   .connector-dashed { stroke: #30363d; stroke-width: 1; stroke-dasharray: 4 3; fill: none; }
-
   @keyframes pulse-glow { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
   .hook-group.just-fired .hook-rect.lit { animation: pulse-glow 0.6s ease-in-out; }
   .fire-count { font-size: 9px; font-weight: 700; fill: #FFD700; display: none; font-family: system-ui, -apple-system, sans-serif; }
   .fire-count.visible { display: block; }
 
-  #event-log { position: absolute; bottom: 8px; right: 8px; background: rgba(22, 27, 34, 0.92); border: 1px solid #30363d; border-radius: 6px; padding: 6px 10px; max-height: 90px; max-width: 240px; overflow-y: auto; z-index: 10; }
-  .log-header { font-size: 10px; color: #8b949e; margin-bottom: 3px; }
+  #event-log { position: absolute; bottom: 0; left: 0; right: 0; background: rgba(13,17,23,0.95); border-top: 1px solid #30363d; padding: 6px 10px; height: 90px; overflow-y: auto; z-index: 10; }
+  .log-header { font-size: 10px; color: #8b949e; margin-bottom: 3px; font-weight: 600; }
   #log-entries { font-family: monospace; font-size: 10px; color: #c9d1d9; }
 </style>
 </head>
@@ -101,375 +86,221 @@
 <header>
   <h1>Claude Code Hooks Lifecycle Demo</h1>
   <div class="header-controls">
-    <div class="status-indicator">
-      <span id="status-dot"></span>
-      <span id="status-text">Disconnected</span>
-    </div>
+    <div class="status-indicator"><span id="status-dot"></span><span id="status-text">Disconnected</span></div>
     <button class="reset-btn" onclick="resetHooks()">Reset All</button>
   </div>
 </header>
 
 <div class="main-content">
 
-  <!-- ===== LEFT PANEL: Project Info + Prompts ===== -->
+  <!-- LEFT PANEL (white/light theme) -->
   <div class="left-panel">
+    <div class="prompts-grid">
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">1. Start Claude</span><div class="prompt-hooks"><span class="hook-tag">Setup</span><span class="hook-tag">SessionStart</span><span class="hook-tag">InstructionsLoaded</span></div></div>
+        <div class="prompt-code"><span class="prefix">$</span> cd demo && claude</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">7. Elicitation</span><div class="prompt-hooks"><span class="hook-tag">Elicitation</span><span class="hook-tag">ElicitationResult</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> Use elicit_boolean to ask if I like pizza</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">2. Use tools</span><div class="prompt-hooks"><span class="hook-tag">UserPromptSubmit</span><span class="hook-tag">PreToolUse</span><span class="hook-tag">PermissionRequest</span><span class="hook-tag">PostToolUse</span><span class="hook-tag">Stop</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> What is the weather in Karachi?</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">8. Worktree</span><div class="prompt-hooks"><span class="hook-tag">WorktreeCreate</span><span class="hook-tag">WorktreeRemove</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> Launch agent with isolation: "worktree"</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">3. Subagent</span><div class="prompt-hooks"><span class="hook-tag">SubagentStart</span><span class="hook-tag">SubagentStop</span><span class="hook-tag">TaskCompleted</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> Use Explore agent to read the README.md file</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">9. Config change</span><div class="prompt-hooks"><span class="hook-tag">ConfigChange</span></div></div>
+        <div class="prompt-code"><span class="prefix">$</span> Edit .claude/settings.json while running</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">4. Failure</span><div class="prompt-hooks"><span class="hook-tag">PostToolUseFailure</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> ls ABC</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">10. Notification</span><div class="prompt-hooks"><span class="hook-tag">Notification</span></div></div>
+        <div class="prompt-code">Leave Claude idle</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">5. Compact</span><div class="prompt-hooks"><span class="hook-tag">PreCompact</span><span class="hook-tag">PostCompact</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> /compact</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">11. End session</span><div class="prompt-hooks"><span class="hook-tag">SessionEnd</span></div></div>
+        <div class="prompt-code"><span class="prefix">&gt;</span> exit</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">6. Agent teams</span><div class="prompt-hooks"><span class="hook-tag">TeammateIdle</span></div></div>
+        <div class="prompt-code"><span class="prefix">$</span> CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 claude</div>
+      </div>
+      <div class="prompt-card">
+        <div class="prompt-header"><span class="prompt-step">12. Setup</span><div class="prompt-hooks"><span class="hook-tag">Setup</span></div></div>
+        <div class="prompt-code"><span class="prefix">$</span> claude --init-only</div>
+      </div>
+    </div>
+  </div>
 
-    <div class="mascot-section">
+  <div class="resize-handle" id="resize-handle"></div>
+
+  <!-- RIGHT PANEL (dark) -->
+  <div class="right-panel" id="right-panel">
+
+    <!-- Branding top-right -->
+    <div class="right-branding">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 90">
         <style>
-          .claude-body { animation: bob 0.8s ease-in-out infinite; transform-origin: center bottom; }
-          .shadow { animation: shadow-pulse 0.8s ease-in-out infinite; }
-          .mouth { animation: talk 0.3s ease-in-out infinite; transform-origin: center center; }
-          .left-ear { animation: ear-tilt-left 0.8s ease-in-out infinite; transform-origin: center bottom; }
-          .right-ear { animation: ear-tilt-right 0.8s ease-in-out infinite; transform-origin: center bottom; }
-          .wave-1 { animation: wave-expand 0.8s ease-out infinite; transform-origin: left center; }
-          .wave-2 { animation: wave-expand 0.8s ease-out infinite 0.2s; transform-origin: left center; }
-          .wave-3 { animation: wave-expand 0.8s ease-out infinite 0.4s; transform-origin: left center; }
-          .note-1 { animation: float-note-1 1.5s ease-out infinite; }
-          .note-2 { animation: float-note-2 1.5s ease-out infinite 0.3s; }
-          .note-3 { animation: float-note-3 1.5s ease-out infinite 0.6s; }
-          @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-          @keyframes shadow-pulse { 0%, 100% { transform: scaleX(1); opacity: 0.25; } 50% { transform: scaleX(0.9); opacity: 0.2; } }
-          @keyframes talk { 0%, 100% { transform: scaleY(1); } 50% { transform: scaleY(0.5); } }
-          @keyframes ear-tilt-left { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-5deg); } }
-          @keyframes ear-tilt-right { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(5deg); } }
-          @keyframes wave-expand { 0% { opacity: 0.8; transform: scaleX(0.3) scaleY(0.8); } 100% { opacity: 0; transform: scaleX(1.2) scaleY(1); } }
-          @keyframes float-note-1 { 0% { opacity: 1; transform: translate(0,0) rotate(0deg); } 100% { opacity: 0; transform: translate(15px,-25px) rotate(15deg); } }
-          @keyframes float-note-2 { 0% { opacity: 1; transform: translate(0,0) rotate(0deg); } 100% { opacity: 0; transform: translate(20px,-30px) rotate(-10deg); } }
-          @keyframes float-note-3 { 0% { opacity: 1; transform: translate(0,0) rotate(0deg); } 100% { opacity: 0; transform: translate(10px,-35px) rotate(20deg); } }
+          .cb{animation:b .8s ease-in-out infinite;transform-origin:center bottom}
+          .sh{animation:sp .8s ease-in-out infinite}
+          .mo{animation:tk .3s ease-in-out infinite;transform-origin:center center}
+          .le{animation:el .8s ease-in-out infinite;transform-origin:center bottom}
+          .re{animation:er .8s ease-in-out infinite;transform-origin:center bottom}
+          .w1{animation:we .8s ease-out infinite;transform-origin:left center}
+          .w2{animation:we .8s ease-out infinite .2s;transform-origin:left center}
+          .w3{animation:we .8s ease-out infinite .4s;transform-origin:left center}
+          .n1{animation:f1 1.5s ease-out infinite}.n2{animation:f2 1.5s ease-out infinite .3s}.n3{animation:f3 1.5s ease-out infinite .6s}
+          @keyframes b{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+          @keyframes sp{0%,100%{transform:scaleX(1);opacity:.25}50%{transform:scaleX(.9);opacity:.2}}
+          @keyframes tk{0%,100%{transform:scaleY(1)}50%{transform:scaleY(.5)}}
+          @keyframes el{0%,100%{transform:rotate(0)}50%{transform:rotate(-5deg)}}
+          @keyframes er{0%,100%{transform:rotate(0)}50%{transform:rotate(5deg)}}
+          @keyframes we{0%{opacity:.8;transform:scaleX(.3) scaleY(.8)}100%{opacity:0;transform:scaleX(1.2) scaleY(1)}}
+          @keyframes f1{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(15px,-25px) rotate(15deg)}}
+          @keyframes f2{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(20px,-30px) rotate(-10deg)}}
+          @keyframes f3{0%{opacity:1;transform:translate(0,0) rotate(0)}100%{opacity:0;transform:translate(10px,-35px) rotate(20deg)}}
         </style>
-        <ellipse class="shadow" cx="50" cy="82" rx="22" ry="5" fill="#000"/>
-        <g class="wave-1"><path d="M 92 44 Q 100 44, 100 52 Q 100 60, 92 60" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
-        <g class="wave-2"><path d="M 96 38 Q 108 38, 108 52 Q 108 66, 96 66" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
-        <g class="wave-3"><path d="M 100 32 Q 116 32, 116 52 Q 116 72, 100 72" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
-        <g class="note-1"><ellipse cx="108" cy="28" rx="4" ry="3" fill="#E07C4C" transform="rotate(-20,108,28)"/><rect x="111" y="12" width="2" height="16" fill="#E07C4C"/><path d="M 113 12 Q 118 14, 118 18 Q 118 22, 113 20" fill="#E07C4C"/></g>
-        <g class="note-2"><ellipse cx="122" cy="22" rx="4" ry="3" fill="#E07C4C" transform="rotate(-20,122,22)"/><rect x="125" y="6" width="2" height="16" fill="#E07C4C"/></g>
-        <g class="note-3"><ellipse cx="115" cy="42" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,115,42)"/><ellipse cx="125" cy="40" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,125,40)"/><rect x="117" y="26" width="2" height="16" fill="#E07C4C"/><rect x="127" y="24" width="2" height="16" fill="#E07C4C"/><rect x="117" y="26" width="12" height="2" fill="#E07C4C"/></g>
-        <g class="claude-body">
-          <rect class="left-ear" x="22" y="10" width="8" height="14" fill="#E07C4C"/>
-          <rect class="right-ear" x="70" y="10" width="8" height="14" fill="#E07C4C"/>
-          <rect x="18" y="24" width="64" height="4" fill="#E07C4C"/>
-          <rect x="14" y="28" width="72" height="32" fill="#E07C4C"/>
-          <rect x="30" y="34" width="8" height="10" fill="#000"/>
-          <rect x="62" y="34" width="8" height="10" fill="#000"/>
-          <rect class="mouth" x="44" y="50" width="12" height="6" fill="#000"/>
-          <rect x="2" y="40" width="12" height="8" fill="#E07C4C"/>
-          <rect x="86" y="40" width="12" height="8" fill="#E07C4C"/>
-          <rect x="24" y="60" width="12" height="14" fill="#E07C4C"/>
-          <rect x="64" y="60" width="12" height="14" fill="#E07C4C"/>
-        </g>
+        <ellipse class="sh" cx="50" cy="82" rx="22" ry="5" fill="#000"/>
+        <g class="w1"><path d="M92 44Q100 44 100 52Q100 60 92 60" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="w2"><path d="M96 38Q108 38 108 52Q108 66 96 66" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="w3"><path d="M100 32Q116 32 116 52Q116 72 100 72" fill="none" stroke="#E07C4C" stroke-width="3" stroke-linecap="round"/></g>
+        <g class="n1"><ellipse cx="108" cy="28" rx="4" ry="3" fill="#E07C4C" transform="rotate(-20,108,28)"/><rect x="111" y="12" width="2" height="16" fill="#E07C4C"/><path d="M113 12Q118 14 118 18Q118 22 113 20" fill="#E07C4C"/></g>
+        <g class="n2"><ellipse cx="122" cy="22" rx="4" ry="3" fill="#E07C4C" transform="rotate(-20,122,22)"/><rect x="125" y="6" width="2" height="16" fill="#E07C4C"/></g>
+        <g class="n3"><ellipse cx="115" cy="42" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,115,42)"/><ellipse cx="125" cy="40" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,125,40)"/><rect x="117" y="26" width="2" height="16" fill="#E07C4C"/><rect x="127" y="24" width="2" height="16" fill="#E07C4C"/><rect x="117" y="26" width="12" height="2" fill="#E07C4C"/></g>
+        <g class="cb"><rect class="le" x="22" y="10" width="8" height="14" fill="#E07C4C"/><rect class="re" x="70" y="10" width="8" height="14" fill="#E07C4C"/><rect x="18" y="24" width="64" height="4" fill="#E07C4C"/><rect x="14" y="28" width="72" height="32" fill="#E07C4C"/><rect x="30" y="34" width="8" height="10" fill="#000"/><rect x="62" y="34" width="8" height="10" fill="#000"/><rect class="mo" x="44" y="50" width="12" height="6" fill="#000"/><rect x="2" y="40" width="12" height="8" fill="#E07C4C"/><rect x="86" y="40" width="12" height="8" fill="#E07C4C"/><rect x="24" y="60" width="12" height="14" fill="#E07C4C"/><rect x="64" y="60" width="12" height="14" fill="#E07C4C"/></g>
+      </svg>
+      <div class="right-branding-text"><strong>Claude Code Voice Hooks</strong>22 supported</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-container">
+      <svg viewBox="0 -32 520 552" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="5" result="blur"/><feFlood flood-color="#FFD700" flood-opacity="0.5" result="color"/><feComposite in="color" in2="blur" operator="in" result="shadow"/><feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <marker id="ah" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto"><polygon points="0 0,6 2.5,0 5" class="arrow-head"/></marker>
+        </defs>
+        <g class="hook-group" data-hook="Setup"><rect class="hook-rect hook-rect-side" x="15" y="5" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="17" text-anchor="middle">Setup</text><text class="hook-subtitle" x="65" y="27" text-anchor="middle">(Init)</text><text class="fire-count" x="112" y="9" text-anchor="end"></text></g>
+        <line class="connector-dashed" x1="115" y1="19" x2="156" y2="19"/>
+        <g class="hook-group" data-hook="Elicitation"><rect class="hook-rect hook-rect-side" x="15" y="150" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="162" text-anchor="middle">Elicitation</text><text class="hook-subtitle" x="65" y="172" text-anchor="middle">(MCP input)</text><text class="fire-count" x="112" y="154" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="ElicitationResult"><rect class="hook-rect hook-rect-side" x="15" y="180" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="192" text-anchor="middle">ElicitationResult</text><text class="hook-subtitle" x="65" y="202" text-anchor="middle">(MCP input)</text><text class="fire-count" x="112" y="184" text-anchor="end"></text></g>
+        <line class="connector-dashed" x1="115" y1="194" x2="156" y2="194"/>
+        <g class="hook-group" data-hook="Notification"><rect class="hook-rect hook-rect-side" x="15" y="335" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="347" text-anchor="middle">Notification</text><text class="hook-subtitle" x="65" y="357" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="339" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="ConfigChange"><rect class="hook-rect hook-rect-side" x="15" y="365" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="377" text-anchor="middle">ConfigChange</text><text class="hook-subtitle" x="65" y="387" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="369" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="WorktreeCreate"><rect class="hook-rect hook-rect-side" x="15" y="395" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="407" text-anchor="middle">WorktreeCreate</text><text class="hook-subtitle" x="65" y="417" text-anchor="middle">(Setup)</text><text class="fire-count" x="112" y="399" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="WorktreeRemove"><rect class="hook-rect hook-rect-side" x="15" y="425" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="437" text-anchor="middle">WorktreeRemove</text><text class="hook-subtitle" x="65" y="447" text-anchor="middle">(Teardown)</text><text class="fire-count" x="112" y="429" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="InstructionsLoaded"><rect class="hook-rect hook-rect-side" x="15" y="-27" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="-15" text-anchor="middle">InstructionsLoaded</text><text class="hook-subtitle" x="65" y="-5" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="-23" text-anchor="end"></text></g>
+        <line class="connector-dashed" x1="65" y1="1" x2="65" y2="5"/>
+        <g class="hook-group" data-hook="SessionStart"><rect class="hook-rect" x="160" y="5" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="23" text-anchor="middle">SessionStart</text><text class="fire-count" x="327" y="9" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="33" x2="245" y2="41" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="UserPromptSubmit"><rect class="hook-rect" x="160" y="41" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="59" text-anchor="middle">UserPromptSubmit</text><text class="fire-count" x="327" y="45" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="69" x2="245" y2="105" marker-end="url(#ah)"/>
+        <rect class="loop-rect" x="80" y="78" width="340" height="247" rx="6"/>
+        <text class="loop-label" x="93" y="93">AGENTIC LOOP</text>
+        <g class="hook-group" data-hook="PreToolUse"><rect class="hook-rect" x="160" y="105" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="123" text-anchor="middle">PreToolUse</text><text class="fire-count" x="327" y="109" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="133" x2="245" y2="141" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="PermissionRequest"><rect class="hook-rect" x="160" y="141" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="159" text-anchor="middle">PermissionRequest</text><text class="fire-count" x="327" y="145" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="169" x2="245" y2="177" marker-end="url(#ah)"/>
+        <g><rect class="tool-rect" x="170" y="179" width="150" height="20" rx="4"/><text class="tool-text" x="245" y="193" text-anchor="middle" style="font-size:10px">[tool executes]</text></g>
+        <line class="arrow-line" x1="245" y1="199" x2="245" y2="213" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hooks="PostToolUse,PostToolUseFailure"><rect class="hook-rect" x="120" y="213" width="250" height="28" rx="5"/><text class="hook-text" x="245" y="231" text-anchor="middle">PostToolUse / PostToolUseFailure</text><text class="fire-count" x="367" y="217" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="241" x2="245" y2="249" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hooks="SubagentStart,SubagentStop"><rect class="hook-rect" x="125" y="249" width="240" height="28" rx="5"/><text class="hook-text" x="245" y="267" text-anchor="middle">SubagentStart / SubagentStop</text><text class="fire-count" x="362" y="253" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="277" x2="245" y2="285" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="TaskCompleted"><rect class="hook-rect" x="160" y="285" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="303" text-anchor="middle">TaskCompleted</text><text class="fire-count" x="327" y="289" text-anchor="end"></text></g>
+        <path class="arrow-line" d="M 330,299 L 365,299 L 365,119 L 340,119"/><polygon points="340,115 330,119 340,123" class="arrow-head"/>
+        <line class="arrow-line" x1="245" y1="313" x2="245" y2="335" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="Stop"><rect class="hook-rect" x="160" y="335" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="353" text-anchor="middle">Stop</text><text class="fire-count" x="327" y="339" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="363" x2="245" y2="371" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="TeammateIdle"><rect class="hook-rect" x="160" y="371" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="389" text-anchor="middle">TeammateIdle</text><text class="fire-count" x="327" y="375" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="399" x2="245" y2="407" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="PreCompact"><rect class="hook-rect" x="160" y="407" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="425" text-anchor="middle">PreCompact</text><text class="fire-count" x="327" y="411" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="435" x2="245" y2="443" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="PostCompact"><rect class="hook-rect" x="160" y="443" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="461" text-anchor="middle">PostCompact</text><text class="fire-count" x="327" y="447" text-anchor="end"></text></g>
+        <line class="arrow-line" x1="245" y1="471" x2="245" y2="479" marker-end="url(#ah)"/>
+        <g class="hook-group" data-hook="SessionEnd"><rect class="hook-rect" x="160" y="479" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="497" text-anchor="middle">SessionEnd</text><text class="fire-count" x="327" y="483" text-anchor="end"></text></g>
+        <path class="arrow-line arrow-dashed" d="M 330,493 L 455,493 L 455,19 L 340,19"/><polygon points="340,15 330,19 340,23" class="arrow-head"/>
+        <text class="resume-label" x="463" y="256" text-anchor="middle" transform="rotate(-90,463,256)">resumed sessions</text>
       </svg>
     </div>
 
-    <div class="project-title">Claude Code Voice Hooks</div>
-
-    <div class="badges">
-      <span class="badge"><span class="badge-label">supports all</span><span class="badge-value">22 hooks</span></span>
-      <span class="badge"><span class="badge-label">updated with Claude Code</span><span class="badge-value">v2.1.76</span></span>
-    </div>
-
-    <div class="divider"></div>
-
-    <div class="section-title">Try These Prompts</div>
-    <div class="section-subtitle">Run each prompt in order to light up the entire lifecycle chart</div>
-
-    <!-- Prompt 1: Start Session -->
-    <div class="prompt-card">
-      <div class="prompt-step">Step 1 &mdash; Start a Claude Session</div>
-      <div class="prompt-label">Open a terminal in the demo/ folder and launch Claude</div>
-      <div class="prompt-code"><span class="prefix">$</span> cd demo/ && claude</div>
-      <div class="prompt-hooks">
-        <span class="hook-tag core">Setup</span>
-        <span class="hook-tag core">SessionStart</span>
-        <span class="hook-tag side">InstructionsLoaded</span>
-      </div>
-      <div class="prompt-note">These fire automatically when Claude initializes and reads CLAUDE.md</div>
-    </div>
-
-    <!-- Prompt 2: Weather question -->
-    <div class="prompt-card">
-      <div class="prompt-step">Step 2 &mdash; Ask a Question That Uses Tools</div>
-      <div class="prompt-label">This triggers the core agentic loop: tool request, permission, execution</div>
-      <div class="prompt-code"><span class="prefix">&gt;</span> What is the weather in Karachi?</div>
-      <div class="prompt-hooks">
-        <span class="hook-tag core">UserPromptSubmit</span>
-        <span class="hook-tag tool">PreToolUse</span>
-        <span class="hook-tag tool">PermissionRequest</span>
-        <span class="hook-tag tool">PostToolUse</span>
-        <span class="hook-tag lifecycle">Stop</span>
-        <span class="hook-tag side">Notification</span>
-      </div>
-      <div class="prompt-note">When Claude calls WebSearch or Bash, the agentic loop hooks fire in sequence</div>
-    </div>
-
-    <!-- Prompt 3: Subagent -->
-    <div class="prompt-card">
-      <div class="prompt-step">Step 3 &mdash; Launch a Subagent</div>
-      <div class="prompt-label">Spawning an agent triggers the subagent lifecycle hooks</div>
-      <div class="prompt-code"><span class="prefix">&gt;</span> Use Explore agent to read the README.md file</div>
-      <div class="prompt-hooks">
-        <span class="hook-tag core">UserPromptSubmit</span>
-        <span class="hook-tag tool">PreToolUse</span>
-        <span class="hook-tag tool">PostToolUse</span>
-        <span class="hook-tag agent">SubagentStart</span>
-        <span class="hook-tag agent">SubagentStop</span>
-        <span class="hook-tag agent">TaskCompleted</span>
-        <span class="hook-tag lifecycle">Stop</span>
-      </div>
-      <div class="prompt-note">The Explore agent runs in a sub-process, firing SubagentStart/Stop around it</div>
-    </div>
-
-    <!-- Prompt 4: Failure + Compact -->
-    <div class="prompt-card">
-      <div class="prompt-step">Step 4 &mdash; Trigger a Failure + Compact</div>
-      <div class="prompt-label">A failing command triggers PostToolUseFailure; /compact triggers compaction hooks</div>
-      <div class="prompt-code"><span class="prefix">&gt;</span> Run the command: ls /nonexistent/path/xyz
-<span class="prefix">&gt;</span> /compact</div>
-      <div class="prompt-hooks">
-        <span class="hook-tag tool">PostToolUseFailure</span>
-        <span class="hook-tag lifecycle">PreCompact</span>
-        <span class="hook-tag lifecycle">PostCompact</span>
-      </div>
-    </div>
-
-    <!-- Prompt 5: Exit -->
-    <div class="prompt-card">
-      <div class="prompt-step">Step 5 &mdash; End the Session</div>
-      <div class="prompt-label">Exiting Claude fires the session cleanup hook</div>
-      <div class="prompt-code"><span class="prefix">&gt;</span> exit
-<span style="color:#6e7681">or press Ctrl+D</span></div>
-      <div class="prompt-hooks">
-        <span class="hook-tag lifecycle">SessionEnd</span>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- Bonus hooks -->
-    <div class="bonus-section">
-      <div class="bonus-title">Remaining Hooks (Special Triggers)</div>
-      <div class="bonus-item"><span class="hook-tag side">ConfigChange</span> Edit <code>.claude/settings.json</code> while Claude is running</div>
-      <div class="bonus-item"><span class="hook-tag side">WorktreeCreate</span> <span class="hook-tag side">WorktreeRemove</span> Launch an agent with <code>isolation: "worktree"</code></div>
-      <div class="bonus-item"><span class="hook-tag side">TeammateIdle</span> Use agent teams: <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1 claude</code></div>
-      <div class="bonus-item"><span class="hook-tag side">Elicitation</span> <span class="hook-tag side">ElicitationResult</span> Use MCP elicit tools: <code>"Use elicit_boolean to ask me if I like pizza"</code></div>
-    </div>
-
-    <div style="height: 20px;"></div>
+    <div id="event-log"><div class="log-header">Event Log</div><div id="log-entries"></div></div>
   </div>
-
-  <!-- Draggable resize handle -->
-  <div class="resize-handle" id="resize-handle"></div>
-
-  <!-- ===== RIGHT PANEL: Lifecycle Chart ===== -->
-  <div class="right-panel" id="right-panel">
-    <svg viewBox="0 0 520 520" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-      <defs>
-        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="5" result="blur"/>
-          <feFlood flood-color="#FFD700" flood-opacity="0.5" result="color"/>
-          <feComposite in="color" in2="blur" operator="in" result="shadow"/>
-          <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
-        </filter>
-        <marker id="ah" markerWidth="6" markerHeight="5" refX="6" refY="2.5" orient="auto">
-          <polygon points="0 0, 6 2.5, 0 5" class="arrow-head"/>
-        </marker>
-      </defs>
-
-      <!-- SIDE HOOKS -->
-      <g class="hook-group" data-hook="Setup"><rect class="hook-rect hook-rect-side" x="15" y="5" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="17" text-anchor="middle">Setup</text><text class="hook-subtitle" x="65" y="27" text-anchor="middle">(Init)</text><text class="fire-count" x="112" y="9" text-anchor="end"></text></g>
-      <line class="connector-dashed" x1="115" y1="19" x2="156" y2="19"/>
-      <g class="hook-group" data-hook="Elicitation"><rect class="hook-rect hook-rect-side" x="15" y="150" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="162" text-anchor="middle">Elicitation</text><text class="hook-subtitle" x="65" y="172" text-anchor="middle">(MCP input)</text><text class="fire-count" x="112" y="154" text-anchor="end"></text></g>
-      <g class="hook-group" data-hook="ElicitationResult"><rect class="hook-rect hook-rect-side" x="15" y="180" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="192" text-anchor="middle">ElicitationResult</text><text class="hook-subtitle" x="65" y="202" text-anchor="middle">(MCP input)</text><text class="fire-count" x="112" y="184" text-anchor="end"></text></g>
-      <line class="connector-dashed" x1="115" y1="194" x2="156" y2="194"/>
-      <g class="hook-group" data-hook="Notification"><rect class="hook-rect hook-rect-side" x="15" y="335" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="347" text-anchor="middle">Notification</text><text class="hook-subtitle" x="65" y="357" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="339" text-anchor="end"></text></g>
-      <g class="hook-group" data-hook="ConfigChange"><rect class="hook-rect hook-rect-side" x="15" y="365" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="377" text-anchor="middle">ConfigChange</text><text class="hook-subtitle" x="65" y="387" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="369" text-anchor="end"></text></g>
-      <g class="hook-group" data-hook="WorktreeCreate"><rect class="hook-rect hook-rect-side" x="15" y="395" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="407" text-anchor="middle">WorktreeCreate</text><text class="hook-subtitle" x="65" y="417" text-anchor="middle">(Setup)</text><text class="fire-count" x="112" y="399" text-anchor="end"></text></g>
-      <g class="hook-group" data-hook="WorktreeRemove"><rect class="hook-rect hook-rect-side" x="15" y="425" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="437" text-anchor="middle">WorktreeRemove</text><text class="hook-subtitle" x="65" y="447" text-anchor="middle">(Teardown)</text><text class="fire-count" x="112" y="429" text-anchor="end"></text></g>
-      <g class="hook-group" data-hook="InstructionsLoaded"><rect class="hook-rect hook-rect-side" x="15" y="479" width="100" height="28" rx="5"/><text class="hook-text hook-text-side" x="65" y="491" text-anchor="middle">InstructionsLoaded</text><text class="hook-subtitle" x="65" y="501" text-anchor="middle">(Async)</text><text class="fire-count" x="112" y="483" text-anchor="end"></text></g>
-
-      <!-- MAIN FLOW -->
-      <g class="hook-group" data-hook="SessionStart"><rect class="hook-rect" x="160" y="5" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="23" text-anchor="middle">SessionStart</text><text class="fire-count" x="327" y="9" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="33" x2="245" y2="41" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="UserPromptSubmit"><rect class="hook-rect" x="160" y="41" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="59" text-anchor="middle">UserPromptSubmit</text><text class="fire-count" x="327" y="45" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="69" x2="245" y2="105" marker-end="url(#ah)"/>
-
-      <rect class="loop-rect" x="80" y="78" width="340" height="247" rx="6"/>
-      <text class="loop-label" x="93" y="93">AGENTIC LOOP</text>
-
-      <g class="hook-group" data-hook="PreToolUse"><rect class="hook-rect" x="160" y="105" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="123" text-anchor="middle">PreToolUse</text><text class="fire-count" x="327" y="109" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="133" x2="245" y2="141" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="PermissionRequest"><rect class="hook-rect" x="160" y="141" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="159" text-anchor="middle">PermissionRequest</text><text class="fire-count" x="327" y="145" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="169" x2="245" y2="177" marker-end="url(#ah)"/>
-      <g><rect class="tool-rect" x="160" y="177" width="170" height="28" rx="5"/><text class="tool-text" x="245" y="195" text-anchor="middle">[tool executes]</text></g>
-      <line class="arrow-line" x1="245" y1="205" x2="245" y2="213" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hooks="PostToolUse,PostToolUseFailure"><rect class="hook-rect" x="120" y="213" width="250" height="28" rx="5"/><text class="hook-text" x="245" y="231" text-anchor="middle">PostToolUse / PostToolUseFailure</text><text class="fire-count" x="367" y="217" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="241" x2="245" y2="249" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hooks="SubagentStart,SubagentStop"><rect class="hook-rect" x="125" y="249" width="240" height="28" rx="5"/><text class="hook-text" x="245" y="267" text-anchor="middle">SubagentStart / SubagentStop</text><text class="fire-count" x="362" y="253" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="277" x2="245" y2="285" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="TaskCompleted"><rect class="hook-rect" x="160" y="285" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="303" text-anchor="middle">TaskCompleted</text><text class="fire-count" x="327" y="289" text-anchor="end"></text></g>
-      <path class="arrow-line" d="M 330,299 L 365,299 L 365,119 L 340,119"/>
-      <polygon points="340,115 330,119 340,123" class="arrow-head"/>
-      <line class="arrow-line" x1="245" y1="313" x2="245" y2="335" marker-end="url(#ah)"/>
-
-      <g class="hook-group" data-hook="Stop"><rect class="hook-rect" x="160" y="335" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="353" text-anchor="middle">Stop</text><text class="fire-count" x="327" y="339" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="363" x2="245" y2="371" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="TeammateIdle"><rect class="hook-rect" x="160" y="371" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="389" text-anchor="middle">TeammateIdle</text><text class="fire-count" x="327" y="375" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="399" x2="245" y2="407" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="PreCompact"><rect class="hook-rect" x="160" y="407" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="425" text-anchor="middle">PreCompact</text><text class="fire-count" x="327" y="411" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="435" x2="245" y2="443" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="PostCompact"><rect class="hook-rect" x="160" y="443" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="461" text-anchor="middle">PostCompact</text><text class="fire-count" x="327" y="447" text-anchor="end"></text></g>
-      <line class="arrow-line" x1="245" y1="471" x2="245" y2="479" marker-end="url(#ah)"/>
-      <g class="hook-group" data-hook="SessionEnd"><rect class="hook-rect" x="160" y="479" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="497" text-anchor="middle">SessionEnd</text><text class="fire-count" x="327" y="483" text-anchor="end"></text></g>
-      <path class="arrow-line arrow-dashed" d="M 330,493 L 455,493 L 455,19 L 340,19"/>
-      <polygon points="340,15 330,19 340,23" class="arrow-head"/>
-      <text class="resume-label" x="463" y="256" text-anchor="middle" transform="rotate(-90, 463, 256)">resumed sessions</text>
-    </svg>
-
-    <div id="event-log">
-      <div class="log-header">Event Log</div>
-      <div id="log-entries"></div>
-    </div>
-  </div>
-
 </div>
 
 <script>
 const API_BASE = window.location.origin;
 let previousState = {};
-let isConnected = false;
 
-function addLogEntry(hookName) {
-  const now = new Date().toLocaleTimeString();
-  const entry = document.createElement('div');
-  entry.textContent = now + ' - ' + hookName + ' fired';
-  entry.style.color = '#FFD700';
-  const logEntries = document.getElementById('log-entries');
-  logEntries.insertBefore(entry, logEntries.firstChild);
-  while (logEntries.children.length > 15) logEntries.removeChild(logEntries.lastChild);
-}
+function addLogEntry(h){var n=new Date().toLocaleTimeString(),e=document.createElement('div');e.textContent=n+' - '+h+' fired';e.style.color='#FFD700';var l=document.getElementById('log-entries');l.appendChild(e);while(l.children.length>50)l.removeChild(l.firstChild);var p=document.getElementById('event-log');p.scrollTop=p.scrollHeight}
 
-async function pollState() {
-  try {
-    const response = await fetch(API_BASE + '/api/state');
-    const state = await response.json();
-    updateVisualization(state);
-    setConnectionStatus(true);
-  } catch (e) { setConnectionStatus(false); }
-  setTimeout(pollState, 500);
-}
+async function pollState(){try{var r=await fetch(API_BASE+'/api/state');var s=await r.json();updateVisualization(s);setConnectionStatus(true)}catch(e){setConnectionStatus(false)}setTimeout(pollState,500)}
 
-function updateVisualization(state) {
-  document.querySelectorAll('[data-hook]').forEach(function(group) {
-    const hookName = group.dataset.hook;
-    const hookState = state.hooks ? state.hooks[hookName] : null;
-    if (!hookState) return;
-    const rect = group.querySelector('.hook-rect');
-    const texts = group.querySelectorAll('.hook-text');
-    const subtitles = group.querySelectorAll('.hook-subtitle');
-    const countEl = group.querySelector('.fire-count');
-    if (hookState.active) {
-      rect.classList.add('lit');
-      texts.forEach(function(t) { t.classList.add('lit'); });
-      subtitles.forEach(function(t) { t.classList.add('lit'); });
-      if (!previousState[hookName] || !previousState[hookName].active) {
-        group.classList.add('just-fired');
-        addLogEntry(hookName);
-        setTimeout(function() { group.classList.remove('just-fired'); }, 700);
+function updateVisualization(state){
+  // Single-hook boxes: detect fire_count changes (not just active transition)
+  document.querySelectorAll('[data-hook]').forEach(function(g){
+    var h=g.dataset.hook,s=state.hooks?state.hooks[h]:null;if(!s)return;
+    var r=g.querySelector('.hook-rect'),t=g.querySelectorAll('.hook-text'),u=g.querySelectorAll('.hook-subtitle'),c=g.querySelector('.fire-count');
+    var prevCount=(previousState[h]&&previousState[h].fire_count)||0;
+    if(s.active){
+      r.classList.add('lit');t.forEach(function(x){x.classList.add('lit')});u.forEach(function(x){x.classList.add('lit')});
+      if(s.fire_count>prevCount){
+        g.classList.remove('just-fired');void g.offsetWidth;g.classList.add('just-fired');
+        for(var i=0;i<s.fire_count-prevCount;i++)addLogEntry(h);
+        setTimeout(function(){g.classList.remove('just-fired')},700);
       }
-    } else {
-      rect.classList.remove('lit');
-      texts.forEach(function(t) { t.classList.remove('lit'); });
-      subtitles.forEach(function(t) { t.classList.remove('lit'); });
-    }
-    if (countEl && hookState.fire_count > 0) { countEl.textContent = hookState.fire_count; countEl.classList.add('visible'); }
+    }else{r.classList.remove('lit');t.forEach(function(x){x.classList.remove('lit')});u.forEach(function(x){x.classList.remove('lit')})}
+    if(c&&s.fire_count>0){c.textContent=s.fire_count;c.classList.add('visible')}
   });
-
-  document.querySelectorAll('[data-hooks]').forEach(function(group) {
-    const hooks = group.dataset.hooks.split(',');
-    const isActive = hooks.some(function(h) { return state.hooks && state.hooks[h] && state.hooks[h].active; });
-    const totalCount = hooks.reduce(function(sum, h) { return sum + (state.hooks && state.hooks[h] ? (state.hooks[h].fire_count || 0) : 0); }, 0);
-    const wasActive = hooks.some(function(h) { return previousState[h] && previousState[h].active; });
-    const rect = group.querySelector('.hook-rect');
-    const texts = group.querySelectorAll('.hook-text');
-    const countEl = group.querySelector('.fire-count');
-    if (isActive) {
-      rect.classList.add('lit');
-      texts.forEach(function(t) { t.classList.add('lit'); });
-      if (!wasActive) {
-        group.classList.add('just-fired');
-        hooks.forEach(function(h) { if (state.hooks && state.hooks[h] && state.hooks[h].active && !(previousState[h] && previousState[h].active)) addLogEntry(h); });
-        setTimeout(function() { group.classList.remove('just-fired'); }, 700);
+  // Combined boxes: detect fire_count changes
+  document.querySelectorAll('[data-hooks]').forEach(function(g){
+    var hs=g.dataset.hooks.split(',');
+    var a=hs.some(function(h){return state.hooks&&state.hooks[h]&&state.hooks[h].active});
+    var tc=hs.reduce(function(s,h){return s+(state.hooks&&state.hooks[h]?(state.hooks[h].fire_count||0):0)},0);
+    var prevTc=hs.reduce(function(s,h){return s+((previousState[h]&&previousState[h].fire_count)||0)},0);
+    var r=g.querySelector('.hook-rect'),t=g.querySelectorAll('.hook-text'),c=g.querySelector('.fire-count');
+    if(a){
+      r.classList.add('lit');t.forEach(function(x){x.classList.add('lit')});
+      if(tc>prevTc){
+        g.classList.remove('just-fired');void g.offsetWidth;g.classList.add('just-fired');
+        hs.forEach(function(h){
+          var cur=(state.hooks&&state.hooks[h])?state.hooks[h].fire_count||0:0;
+          var prev=(previousState[h])?previousState[h].fire_count||0:0;
+          for(var i=0;i<cur-prev;i++)addLogEntry(h);
+        });
+        setTimeout(function(){g.classList.remove('just-fired')},700);
       }
-    } else {
-      rect.classList.remove('lit');
-      texts.forEach(function(t) { t.classList.remove('lit'); });
-    }
-    if (countEl && totalCount > 0) { countEl.textContent = totalCount; countEl.classList.add('visible'); }
+    }else{r.classList.remove('lit');t.forEach(function(x){x.classList.remove('lit')})}
+    if(c&&tc>0){c.textContent=tc;c.classList.add('visible')}
   });
-
-  previousState = state.hooks ? JSON.parse(JSON.stringify(state.hooks)) : {};
+  previousState=state.hooks?JSON.parse(JSON.stringify(state.hooks)):{};
 }
 
-function setConnectionStatus(connected) {
-  isConnected = connected;
-  document.getElementById('status-dot').style.background = connected ? '#3fb950' : '#f85149';
-  document.getElementById('status-text').textContent = connected ? 'Connected' : 'Disconnected';
-}
+function setConnectionStatus(c){document.getElementById('status-dot').style.background=c?'#3fb950':'#f85149';document.getElementById('status-text').textContent=c?'Connected':'Disconnected'}
 
-async function resetHooks() {
-  try {
-    await fetch(API_BASE + '/api/reset', { method: 'POST' });
-    previousState = {};
-    document.querySelectorAll('.lit').forEach(function(el) { el.classList.remove('lit'); });
-    document.querySelectorAll('.fire-count').forEach(function(el) { el.classList.remove('visible'); el.textContent = ''; });
-    document.getElementById('log-entries').innerHTML = '';
-  } catch (e) { console.error('Reset failed:', e); }
-}
+async function resetHooks(){try{await fetch(API_BASE+'/api/reset',{method:'POST'});previousState={};document.querySelectorAll('.lit').forEach(function(e){e.classList.remove('lit')});document.querySelectorAll('.fire-count').forEach(function(e){e.classList.remove('visible');e.textContent=''});document.getElementById('log-entries').innerHTML=''}catch(e){}}
 
-// ===== Resizable divider =====
-(function() {
-  var handle = document.getElementById('resize-handle');
-  var rightPanel = document.getElementById('right-panel');
-  var container = document.querySelector('.main-content');
-  var dragging = false;
+// Resizable divider
+(function(){var h=document.getElementById('resize-handle'),rp=document.getElementById('right-panel'),mc=document.querySelector('.main-content'),d=false;
+h.addEventListener('mousedown',function(e){e.preventDefault();d=true;h.classList.add('dragging');document.body.style.cursor='col-resize';document.body.style.userSelect='none'});
+document.addEventListener('mousemove',function(e){if(!d)return;var cr=mc.getBoundingClientRect(),tw=cr.width,mx=e.clientX-cr.left,rw=tw-mx-4;var mr=tw*0.3;if(rw<mr)rw=mr;if(tw-rw-4<200)return;rp.style.width=(rw/tw*100)+'%'});
+document.addEventListener('mouseup',function(){if(d){d=false;h.classList.remove('dragging');document.body.style.cursor='';document.body.style.userSelect=''}})})();
 
-  handle.addEventListener('mousedown', function(e) {
-    e.preventDefault();
-    dragging = true;
-    handle.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-  });
-
-  document.addEventListener('mousemove', function(e) {
-    if (!dragging) return;
-    var containerRect = container.getBoundingClientRect();
-    var totalWidth = containerRect.width;
-    var mouseX = e.clientX - containerRect.left;
-    // Right panel width = total - mouseX - handle width(5px)
-    var rightWidth = totalWidth - mouseX - 5;
-    // Enforce minimum 40% for right panel
-    var minRight = totalWidth * 0.4;
-    if (rightWidth < minRight) rightWidth = minRight;
-    // Also keep left panel at least 200px
-    var leftWidth = totalWidth - rightWidth - 5;
-    if (leftWidth < 200) return;
-    var rightPct = (rightWidth / totalWidth) * 100;
-    rightPanel.style.width = rightPct + '%';
-  });
-
-  document.addEventListener('mouseup', function() {
-    if (dragging) {
-      dragging = false;
-      handle.classList.remove('dragging');
-      document.body.style.cursor = '';
-      document.body.style.userSelect = '';
-    }
-  });
-})();
-
-document.addEventListener('DOMContentLoaded', pollState);
+document.addEventListener('DOMContentLoaded',pollState);
 </script>
-
 </body>
 </html>

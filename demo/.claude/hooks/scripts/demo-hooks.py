@@ -93,39 +93,48 @@ def play_sound(sound_folder_name):
 
 
 def update_state(hook_name):
-    """Update the state file to mark a hook as active (atomic write)."""
+    """Update the state file to mark a hook as active (file-locked read-modify-write)."""
+    import fcntl
+
     state_dir = get_state_dir()
-    state_file = state_dir / "hook-state.json"
-
-    # Read current state
-    try:
-        with open(state_file, "r") as f:
-            state = json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        state = create_initial_state()
-
-    # Update the hook
-    if hook_name in state["hooks"]:
-        state["hooks"][hook_name]["active"] = True
-        state["hooks"][hook_name]["last_fired"] = time.time()
-        state["hooks"][hook_name]["fire_count"] = (
-            state["hooks"][hook_name].get("fire_count", 0) + 1
-        )
-    state["last_updated"] = time.time()
-
-    # Atomic write: write to temp file then rename
     state_dir.mkdir(parents=True, exist_ok=True)
-    fd, temp_path = tempfile.mkstemp(dir=str(state_dir), suffix=".json")
-    try:
-        with os.fdopen(fd, "w") as f:
-            json.dump(state, f, indent=2)
-        os.replace(temp_path, str(state_file))
-    except Exception:
+    state_file = state_dir / "hook-state.json"
+    lock_file = state_dir / ".hook-state.lock"
+
+    # Use a lock file to prevent race conditions between concurrent hook fires
+    with open(lock_file, "w") as lf:
+        fcntl.flock(lf.fileno(), fcntl.LOCK_EX)
         try:
-            os.unlink(temp_path)
-        except OSError:
-            pass
-        raise
+            # Read current state under lock
+            try:
+                with open(state_file, "r") as f:
+                    state = json.load(f)
+            except (FileNotFoundError, json.JSONDecodeError):
+                state = create_initial_state()
+
+            # Update the hook
+            if hook_name in state["hooks"]:
+                state["hooks"][hook_name]["active"] = True
+                state["hooks"][hook_name]["last_fired"] = time.time()
+                state["hooks"][hook_name]["fire_count"] = (
+                    state["hooks"][hook_name].get("fire_count", 0) + 1
+                )
+            state["last_updated"] = time.time()
+
+            # Write state under lock
+            fd, temp_path = tempfile.mkstemp(dir=str(state_dir), suffix=".json")
+            try:
+                with os.fdopen(fd, "w") as f:
+                    json.dump(state, f, indent=2)
+                os.replace(temp_path, str(state_file))
+            except Exception:
+                try:
+                    os.unlink(temp_path)
+                except OSError:
+                    pass
+                raise
+        finally:
+            fcntl.flock(lf.fileno(), fcntl.LOCK_UN)
 
 
 def main():
