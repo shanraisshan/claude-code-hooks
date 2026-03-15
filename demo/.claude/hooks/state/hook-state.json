@@ -1,0 +1,115 @@
+{
+  "hooks": {
+    "SessionStart": {
+      "active": true,
+      "last_fired": 1773568551.195312,
+      "fire_count": 1
+    },
+    "UserPromptSubmit": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PreToolUse": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PermissionRequest": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PostToolUse": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PostToolUseFailure": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "Notification": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "Stop": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "SubagentStart": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "SubagentStop": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PreCompact": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "PostCompact": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "SessionEnd": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "Setup": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "TeammateIdle": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "TaskCompleted": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "ConfigChange": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "WorktreeCreate": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "WorktreeRemove": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "InstructionsLoaded": {
+      "active": true,
+      "last_fired": 1773568550.676903,
+      "fire_count": 1
+    },
+    "Elicitation": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    },
+    "ElicitationResult": {
+      "active": false,
+      "last_fired": null,
+      "fire_count": 0
+    }
+  },
+  "last_updated": 1773568551.195313
+}
