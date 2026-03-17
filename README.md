@@ -68,9 +68,9 @@ new hook addition changelogs only
   <a href="https://medium.com/@shanraisshan/claude-code-just-got-a-voice-%25EF%25B8%258F-51008157305b"><img src="!/pill-medium.svg" alt="Medium" height="36"></a>
 </p>
 
-## Other CLI Voice Hooks
+## Other Repos
 
-<p><a href="https://github.com/shanraisshan/codex-cli-voice-hooks"><img src="https://raw.githubusercontent.com/shanraisshan/codex-cli-voice-hooks/main/!/codex-speaking.svg" alt="Codex CLI mascot" width="50" height="45" align="middle"></a>&nbsp;&nbsp;<a href="https://github.com/shanraisshan/codex-cli-voice-hooks"><b><ins>codex-cli-voice-hooks</ins></b></a></p>
+<a href="https://github.com/shanraisshan/codex-cli-voice-hooks"><img src="!/codex-speaking.svg" alt="Codex CLI Voice Hooks" width="40" height="40" align="center"></a> <a href="https://github.com/shanraisshan/codex-cli-voice-hooks"><strong>codex-cli-voice-hooks</strong></a> · <a href="https://github.com/shanraisshan/claude-code-best-practice"><img src="!/claude-jumping.svg" alt="Claude Code Best Practice" width="40" height="40" align="center"></a> <a href="https://github.com/shanraisshan/claude-code-best-practice"><strong>claude-code-best-practice</strong></a> · <a href="https://github.com/shanraisshan/codex-cli-best-practice"><img src="!/codex-jumping.svg" alt="Codex CLI Best Practice" width="40" height="40" align="center"></a> <a href="https://github.com/shanraisshan/codex-cli-best-practice"><strong>codex-cli-best-practice</strong></a>
 
 ## Developed by
 
