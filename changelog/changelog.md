@@ -361,3 +361,15 @@
 | 3 | MEDIUM | Hook Enhancement | Document PreToolUse `updatedInput` for AskUserQuestion — enables headless integrations to auto-respond to user questions (v2.1.85) | ✋ ON HOLD (not yet in official docs pages — only in GitHub changelog; will document when docs update) |
 | 4 | MEDIUM | Can-Block Status | PostToolUseFailure — official docs say Cannot Block (output is only `additionalContext`), but repo had Can Block since v2.1.69 in presentation badge, summary list, and HOOKS-README Decision Control table | ✅ COMPLETE (changed presentation badge to "Cannot Block", removed from summary can-block list, removed from HOOKS-README Decision Control blocking group) |
 | 5 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-03-28 06:07 PM PKT] Claude Code v2.1.86
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | HIGH | New Hook Option | Document `if` conditional field in HOOKS-README — now confirmed in official hooks guide (permission rule syntax, v2.1.85). Previously ON HOLD awaiting docs | ✅ COMPLETE (added Hook Option: `if` subsection to HOOKS-README with syntax, supported hooks, and examples) |
+| 2 | LOW | Matcher/Schema | Add `AskUserQuestion`, `ExitPlanMode` to PreToolUse matcher example in HOOKS-README line 448 (official docs list these as matchable tool names) | ✅ COMPLETE (added both tool names to PreToolUse matcher example) |
+| 3 | LOW | Hook Enhancement | Document PreToolUse `updatedInput` for AskUserQuestion — headless integration feature (v2.1.85) | ✅ COMPLETE (added subsection to HOOKS-README with example JSON and use cases) |
+| 4 | LOW | Schema Discovery | Monitor `CronCreate` hook — mentioned in v2.1.85 changelog but NOT in schema or official docs | ❌ INVALID (not in schema propertyNames enum, not in official docs — likely internal/non-hook feature per Rule 6A) |
+| 5 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |

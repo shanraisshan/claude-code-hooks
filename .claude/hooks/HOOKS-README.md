@@ -323,6 +323,32 @@ The `statusMessage` field sets a custom spinner message displayed to the user wh
 
 This project sets `statusMessage` to the hook event name on all hooks, so the spinner briefly shows which hook is firing (e.g., "PreToolUse", "SessionStart", "Stop"). This is most visible for synchronous hooks; for async hooks the message flashes briefly before the hook runs in the background.
 
+### Hook Option: `if` (since v2.1.85)
+
+The `if` field adds conditional execution to hooks using permission rule syntax. When set, the hook process is only spawned if the condition matches — reducing unnecessary process spawning:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "./validate-git.sh",
+        "if": "Bash(git *)"
+      }]
+    }]
+  }
+}
+```
+
+**Key details:**
+- Uses permission rule syntax: `Bash(git *)`, `Edit(*.ts)`, `mcp__.*`
+- Only applies to tool event hooks: `PreToolUse`, `PostToolUse`, `PostToolUseFailure`, `PermissionRequest`
+- Set at the handler level (per-handler granularity), not the matcher level
+- Without `if`, the hook process spawns on every matcher match — with `if`, it only spawns when the condition also matches
+- This project does not use `if` since all hooks fire for sound playback regardless of tool arguments
+
 ## Hook Types
 
 Claude Code supports four hook handler types. This project uses `command` hooks for all sound playback.
@@ -445,7 +471,7 @@ Matchers filter which events trigger a hook. Not all hooks support matchers — 
 
 | Hook | Matcher Field | Possible Values | Example |
 |------|--------------|-----------------|---------|
-| `PreToolUse` | `tool_name` | Any tool name: `Bash`, `Read`, `Edit`, `Write`, `Glob`, `Grep`, `Agent`, `WebFetch`, `WebSearch`, `mcp__*` | `"matcher": "Bash"` |
+| `PreToolUse` | `tool_name` | Any tool name: `Bash`, `Read`, `Edit`, `Write`, `Glob`, `Grep`, `Agent`, `WebFetch`, `WebSearch`, `AskUserQuestion`, `ExitPlanMode`, `mcp__*` | `"matcher": "Bash"` |
 | `PermissionRequest` | `tool_name` | Same as PreToolUse | `"matcher": "mcp__memory__.*"` |
 | `PostToolUse` | `tool_name` | Same as PreToolUse | `"matcher": "Write"` |
 | `PostToolUseFailure` | `tool_name` | Same as PreToolUse | `"matcher": "Bash"` |
@@ -487,6 +513,23 @@ Matchers filter which events trigger a hook. Not all hooks support matchers — 
 | Stop | `Stop:` | `"SubagentStop"` | ❌ Inconsistent |
 
 **Status:** The [official hooks reference](https://code.claude.com/docs/en/hooks#hooks-in-skills-and-agents) now documents this as expected behavior: *"For subagents, Stop hooks are automatically converted to SubagentStop since that is the event that fires when a subagent completes."* This project handles it via the `AGENT_HOOK_SOUND_MAP` in `hooks.py`, which has a separate `SubagentStop` entry that maps to the `agent_subagentstop` sound folder.
+
+### PreToolUse `updatedInput` for AskUserQuestion (since v2.1.85)
+
+When a `PreToolUse` hook matches `AskUserQuestion`, it can return `updatedInput` to auto-respond to the question — enabling headless integrations to programmatically answer user questions without manual input:
+
+```json
+{
+  "hookSpecificOutput": {
+    "updatedInput": {
+      "question": "Do you want to proceed?",
+      "answer": "yes"
+    }
+  }
+}
+```
+
+This is useful for CI/CD pipelines, automated testing, or any context where Claude Code runs without a human at the terminal. Not yet in official docs pages — sourced from GitHub changelog v2.1.85.
 
 ### PreToolUse Decision Control Deprecation
 
