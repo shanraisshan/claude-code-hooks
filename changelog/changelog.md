@@ -373,3 +373,16 @@
 | 3 | LOW | Hook Enhancement | Document PreToolUse `updatedInput` for AskUserQuestion — headless integration feature (v2.1.85) | ✅ COMPLETE (added subsection to HOOKS-README with example JSON and use cases) |
 | 4 | LOW | Schema Discovery | Monitor `CronCreate` hook — mentioned in v2.1.85 changelog but NOT in schema or official docs | ❌ INVALID (not in schema propertyNames enum, not in official docs — likely internal/non-hook feature per Rule 6A) |
 | 5 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-03-29 07:43 PM PKT] Claude Code v2.1.87
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | MEDIUM | Hook Options Table | Update WorktreeCreate Options: `name` → `worktree_path`, `worktree_name`, `base_branch`; WorktreeRemove: add `worktree_name` — per official docs | ✅ COMPLETE (updated HOOKS-README Options column for both hooks) |
+| 2 | MEDIUM | Hook Options Table | Update FileChanged Options: `event` → `change_type` per official docs | ✅ COMPLETE (updated HOOKS-README Options column) |
+| 3 | MEDIUM | Hook Options Table | Update Elicitation Options: remove stale fields, add `tool_name`, `form_fields`; ElicitationResult: remove stale fields, add `tool_name`, `form_fields` — per official docs | ✅ COMPLETE (updated HOOKS-README Options column for both hooks) |
+| 4 | MEDIUM | Hook Options Table | Update PreCompact/PostCompact: `trigger` → `compact_trigger`, remove undocumented `custom_instructions`/`compact_summary` — per official docs | ✅ COMPLETE (updated HOOKS-README Options column and matcher table) |
+| 5 | MEDIUM | Can-Block Status | PostToolUse can-block — official docs confirm "No" (exit code 2 = feedback only, tool already ran). Updated presentation badge and summary list, removed from HOOKS-README Decision Control blocking group | ✅ COMPLETE (changed presentation badge to Cannot Block, removed from summary can-block list, updated Decision Control table) |
+| 6 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
