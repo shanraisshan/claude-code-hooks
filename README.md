@@ -48,7 +48,7 @@ new hook addition changelogs only
 
 | Date | Hooks | Changes | Claude Code Version | Demo |
 |------|:-----:|---------|:-------------------:|:----:|
-| Mar 26, 2026 | 26 | Added `TaskCreated` | [v2.1.84](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2184) | [Demo 4](https://www.youtube.com/watch?v=O8PVI6JsfFc) |
+| Mar 26, 2026 | 26 | Added `TaskCreated` | [v2.1.84](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2184) | [Demo 4](https://youtu.be/MnpOsTEDzeY) |
 | Mar 25, 2026 | 25 | Added `CwdChanged`, `FileChanged` | [v2.1.83](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2183) | |
 | Mar 18, 2026 | 23 | Added `StopFailure` | [v2.1.78](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2178) | |
 | Mar 14, 2026 | 22 | Added `PostCompact`, `Elicitation`, `ElicitationResult` | [v2.1.76](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2176) | |
