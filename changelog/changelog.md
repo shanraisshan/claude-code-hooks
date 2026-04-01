@@ -397,3 +397,13 @@
 | 2 | HIGH | Not-in-Docs Table | Add PermissionDenied to HOOKS-README Not-in-Docs table; update Setup note to include PermissionDenied exclusion | ✅ COMPLETE (added row + updated Setup note to "25 hooks listed, Setup and PermissionDenied excluded") |
 | 3 | MEDIUM | Hook Options Table | Investigate CwdChanged field name: `old_cwd` vs `previous_cwd` — WebFetch extraction suggested `previous_cwd` but page was truncated | ❌ INVALID (false positive — official docs confirm `old_cwd` and `new_cwd`, HOOKS-README is correct) |
 | 4 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-01 10:58 AM PKT] Claude Code v2.1.89
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | MEDIUM | Config Drift | Fix HOOKS-README line 178: "not all 26" → "not all 27" (stale after PermissionDenied addition) | ✅ COMPLETE (updated to "not all 27") |
+| 2 | LOW | New Feature | Document PreToolUse "defer" permission decision (v2.1.89, headless resume) in HOOKS-README Decision Control table | ✋ ON HOLD (not yet in official docs pages — only in GitHub changelog; will document when docs update) |
+| 3 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |

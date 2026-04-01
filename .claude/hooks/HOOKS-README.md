@@ -175,7 +175,7 @@ Claude Code 2.1.0 introduced support for agent-specific hooks defined in agent f
 
 ### Supported Agent Hooks
 
-Agent frontmatter hooks support **6 hooks** (not all 26). The changelog originally mentioned only 3, but testing confirms 6 hooks actually fire in agent sessions:
+Agent frontmatter hooks support **6 hooks** (not all 27). The changelog originally mentioned only 3, but testing confirms 6 hooks actually fire in agent sessions:
 - `PreToolUse`: Runs before the agent uses a tool
 - `PostToolUse`: Runs after the agent completes a tool use
 - `PermissionRequest`: Runs when a tool requires user permission
