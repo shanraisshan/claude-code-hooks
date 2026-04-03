@@ -423,3 +423,11 @@
 | 7 | LOW | Config Drift | Fix HOOKS-README line 186 stale count: "remaining 10 hooks" → "remaining 21 hooks" (27 - 6 = 21) | ✅ COMPLETE (updated to "remaining 21") |
 | 8 | MEDIUM | Workflow Fix | Root cause: workflow-add-hook only updates structured locations (heading, numbered list) but never sweeps for prose-embedded count references. Added Step 6 "Stale Count Sweep" to workflow-add-hook and Rule 7A/7B to verification checklist | ✅ COMPLETE (updated workflow-add-hook.md, workflow-changelog.md, and verification-checklist.md) |
 | 9 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-03 10:57 PM PKT] Claude Code v2.1.91
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
