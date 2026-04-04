@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claude Code vs Codex CLI - Speed Comparison</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #ffffff;
+            color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .left-side {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .right-side {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .versus-text {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 1.8rem;
+            color: #888;
+            padding: 0 16px;
+        }
+
+        .pixel-title-claude {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 2.4rem;
+            color: #E07C4C;
+            line-height: 1.4;
+            text-align: left;
+        }
+
+        .pixel-title-codex {
+            font-family: 'Nunito', sans-serif;
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: #7C3AED;
+            line-height: 1.2;
+            text-align: right;
+        }
+
+        .subtitle {
+            font-size: 3.2rem;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            font-weight: 700;
+            background: linear-gradient(90deg, #1a1a1a 0%, #666 50%, #1a1a1a 100%);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer-seq 10s ease-in-out infinite;
+        }
+
+        .project-line {
+            font-size: 1.3rem;
+            color: #666;
+            margin-bottom: 50px;
+            font-weight: 400;
+        }
+
+        .footer {
+            margin-top: 60px;
+            font-size: 0.95rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-row">
+        <!-- Claude Code (left) -->
+        <div class="left-side">
+            <!-- Claude jumping mascot -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 90" width="120" height="108">
+                <style>
+                    .claude-body { animation: claude-jump 0.5s ease-in-out infinite; transform-origin: center bottom; }
+                    .claude-shadow { animation: claude-shadow-scale 0.5s ease-in-out infinite; }
+                    .claude-left-arm { animation: claude-wave-left 0.5s ease-in-out infinite; transform-origin: right center; }
+                    .claude-right-arm { animation: claude-wave-right 0.5s ease-in-out infinite; transform-origin: left center; }
+                    .claude-left-ear { animation: claude-ear-bounce 0.5s ease-in-out infinite; transform-origin: center bottom; }
+                    .claude-right-ear { animation: claude-ear-bounce 0.5s ease-in-out infinite 0.1s; transform-origin: center bottom; }
+                    @keyframes claude-jump { 0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); } 30% { transform: translateY(-16px) scaleY(1.1) scaleX(0.95); } 50% { transform: translateY(-18px) scaleY(1.05) scaleX(0.98); } 80% { transform: translateY(-5px) scaleY(0.95) scaleX(1.05); } }
+                    @keyframes claude-shadow-scale { 0%, 100% { transform: scaleX(1); opacity: 0.25; } 50% { transform: scaleX(0.4); opacity: 0.08; } }
+                    @keyframes claude-wave-left { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-25deg); } }
+                    @keyframes claude-wave-right { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(25deg); } }
+                    @keyframes claude-ear-bounce { 0%, 100% { transform: scaleY(1); } 40% { transform: scaleY(1.2); } 60% { transform: scaleY(0.85); } }
+                </style>
+                <ellipse class="claude-shadow" cx="50" cy="82" rx="22" ry="5" fill="#000"/>
+                <g class="claude-body">
+                    <rect class="claude-left-ear" x="22" y="10" width="8" height="14" fill="#E07C4C"/>
+                    <rect class="claude-right-ear" x="70" y="10" width="8" height="14" fill="#E07C4C"/>
+                    <rect x="18" y="24" width="64" height="4" fill="#E07C4C"/>
+                    <rect x="14" y="28" width="72" height="32" fill="#E07C4C"/>
+                    <rect x="30" y="34" width="8" height="10" fill="#000000"/>
+                    <rect x="62" y="34" width="8" height="10" fill="#000000"/>
+                    <rect class="claude-left-arm" x="2" y="36" width="12" height="8" fill="#E07C4C"/>
+                    <rect class="claude-right-arm" x="86" y="36" width="12" height="8" fill="#E07C4C"/>
+                    <rect x="24" y="60" width="12" height="14" fill="#E07C4C"/>
+                    <rect x="64" y="60" width="12" height="14" fill="#E07C4C"/>
+                </g>
+            </svg>
+            <div class="pixel-title-claude">CLAUDE<br>CODE</div>
+        </div>
+
+        <!-- versus -->
+        <div class="versus-text">vs</div>
+
+        <!-- Codex CLI (right) -->
+        <div class="right-side">
+            <div class="pixel-title-codex">CODEX<br>CLI</div>
+            <!-- Codex jumping mascot -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 170" width="90" height="108">
+                <defs>
+                    <linearGradient id="cxBodyGrad" x1="0.5" y1="0" x2="0.5" y2="1">
+                        <stop offset="0%" stop-color="#9333EA"/>
+                        <stop offset="30%" stop-color="#7C3AED"/>
+                        <stop offset="55%" stop-color="#5B6CF0"/>
+                        <stop offset="80%" stop-color="#3B9AEE"/>
+                        <stop offset="100%" stop-color="#22D3EE"/>
+                    </linearGradient>
+                    <linearGradient id="cxArmL" x1="0" y1="0" x2="1" y2="0.5">
+                        <stop offset="0%" stop-color="#6D28D9"/>
+                        <stop offset="50%" stop-color="#7C3AED"/>
+                        <stop offset="100%" stop-color="#5B21B6"/>
+                    </linearGradient>
+                    <linearGradient id="cxArmR" x1="0" y1="0" x2="1" y2="0.5">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="50%" stop-color="#6D28D9"/>
+                        <stop offset="100%" stop-color="#5B21B6"/>
+                    </linearGradient>
+                    <linearGradient id="cxLimbGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#7C3AED"/>
+                        <stop offset="50%" stop-color="#6D28D9"/>
+                        <stop offset="100%" stop-color="#5B21B6"/>
+                    </linearGradient>
+                    <radialGradient id="cxEyeGrad" cx="35%" cy="30%" r="65%">
+                        <stop offset="0%" stop-color="#FFFFFF"/>
+                        <stop offset="60%" stop-color="#F0F0F0"/>
+                        <stop offset="100%" stop-color="#D8D8D8"/>
+                    </radialGradient>
+                    <radialGradient id="cxShadowGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#4C1D95" stop-opacity="0.35"/>
+                        <stop offset="60%" stop-color="#4C1D95" stop-opacity="0.15"/>
+                        <stop offset="100%" stop-color="#4C1D95" stop-opacity="0"/>
+                    </radialGradient>
+                    <filter id="cxDropShadow" x="-15%" y="-15%" width="130%" height="140%">
+                        <feDropShadow dx="2" dy="3.5" stdDeviation="2.5" flood-color="#4C1D95" flood-opacity="0.3"/>
+                    </filter>
+                    <filter id="cxInnerDepth" x="-5%" y="-5%" width="110%" height="110%">
+                        <feGaussianBlur in="SourceAlpha" stdDeviation="2" result="blur"/>
+                        <feOffset dx="0" dy="2" result="off"/>
+                        <feFlood flood-color="#3B0764" flood-opacity="0.25" result="color"/>
+                        <feComposite in="color" in2="off" operator="in" result="shadow"/>
+                        <feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/></feMerge>
+                    </filter>
+                    <clipPath id="cxCloudClip">
+                        <circle cx="128" cy="68" r="56"/>
+                        <circle cx="192" cy="100" r="54"/>
+                        <circle cx="188" cy="168" r="54"/>
+                        <circle cx="128" cy="192" r="54"/>
+                        <circle cx="68" cy="168" r="54"/>
+                        <circle cx="64" cy="100" r="54"/>
+                        <circle cx="128" cy="130" r="60"/>
+                    </clipPath>
+                </defs>
+                <style>
+                    .codex-body { animation: codex-jump 0.5s ease-in-out infinite; transform-origin: center bottom; }
+                    .codex-shadow { animation: codex-shadow-scale 0.5s ease-in-out infinite; }
+                    .codex-left-arm { animation: codex-wave-left 0.5s ease-in-out infinite; transform-origin: right center; }
+                    .codex-right-arm { animation: codex-wave-right 0.5s ease-in-out infinite; transform-origin: left center; }
+                    @keyframes codex-jump { 0%, 100% { transform: translateY(0) scaleY(1) scaleX(1); } 30% { transform: translateY(-16px) scaleY(1.1) scaleX(0.95); } 50% { transform: translateY(-18px) scaleY(1.05) scaleX(0.98); } 80% { transform: translateY(-5px) scaleY(0.95) scaleX(1.05); } }
+                    @keyframes codex-shadow-scale { 0%, 100% { transform: scaleX(1); opacity: 0.25; } 50% { transform: scaleX(0.4); opacity: 0.08; } }
+                    @keyframes codex-wave-left { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-25deg); } }
+                    @keyframes codex-wave-right { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(25deg); } }
+                </style>
+                <ellipse class="codex-shadow" cx="70" cy="158" rx="28" ry="6" fill="url(#cxShadowGrad)"/>
+                <g class="codex-body">
+                    <g filter="url(#cxDropShadow)">
+                        <g transform="translate(14, 16) scale(0.44)" filter="url(#cxInnerDepth)">
+                            <rect x="0" y="0" width="256" height="256" fill="url(#cxBodyGrad)" clip-path="url(#cxCloudClip)"/>
+                        </g>
+                        <rect x="24" y="26" width="22" height="12" fill="#C4B5FD" opacity="0.2" rx="3"/>
+                        <rect x="27" y="29" width="12" height="6" fill="#DDD6FE" opacity="0.15" rx="2"/>
+                        <line x1="48" y1="88" x2="57" y2="98" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+                        <line x1="57" y1="98" x2="48" y2="108" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+                        <line x1="64" y1="108" x2="82" y2="108" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.85"/>
+                        <rect x="38" y="58" width="14" height="20" rx="4" fill="url(#cxEyeGrad)" stroke="#4C1D95" stroke-width="2"/>
+                        <rect x="40" y="60" width="4" height="4" fill="#fff" opacity="0.8" rx="1"/>
+                        <rect x="46" y="70" width="2" height="2" fill="#fff" opacity="0.35" rx="0.5"/>
+                        <circle cx="45" cy="70" r="3.5" fill="#4C1D95" opacity="0.7"/>
+                        <rect x="72" y="58" width="14" height="20" rx="4" fill="url(#cxEyeGrad)" stroke="#4C1D95" stroke-width="2"/>
+                        <rect x="74" y="60" width="4" height="4" fill="#fff" opacity="0.8" rx="1"/>
+                        <rect x="80" y="70" width="2" height="2" fill="#fff" opacity="0.35" rx="0.5"/>
+                        <circle cx="79" cy="70" r="3.5" fill="#4C1D95" opacity="0.7"/>
+                    </g>
+                    <g class="codex-left-arm">
+                        <rect x="6" y="72" width="20" height="10" rx="4" fill="url(#cxArmL)"/>
+                        <rect x="8" y="74" width="7" height="3.5" fill="#A78BFA" opacity="0.25" rx="1"/>
+                    </g>
+                    <g class="codex-right-arm">
+                        <rect x="112" y="72" width="20" height="10" rx="4" fill="url(#cxArmR)"/>
+                        <rect x="114" y="74" width="7" height="3.5" fill="#A78BFA" opacity="0.25" rx="1"/>
+                    </g>
+                    <rect x="42" y="128" width="14" height="24" rx="4" fill="url(#cxLimbGrad)"/>
+                    <rect x="44" y="130" width="5" height="12" fill="#A78BFA" opacity="0.25" rx="1"/>
+                    <rect x="84" y="128" width="14" height="24" rx="4" fill="url(#cxLimbGrad)"/>
+                    <rect x="86" y="130" width="5" height="12" fill="#A78BFA" opacity="0.25" rx="1"/>
+                </g>
+            </svg>
+        </div>
+    </div>
+
+    <p class="subtitle">SPEED COMPARISON</p>
+    <p class="project-line">Explained using live projects <strong>Claude Code Hooks</strong> and <strong>Codex CLI Hooks</strong></p>
+    <p class="footer">As of Claude Code v2.1.91 | Codex CLI v0.118.0 | April 04, 2026</p>
+</body>
+</html>
