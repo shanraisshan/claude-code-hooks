@@ -226,7 +226,7 @@ When executing:
 3. **Never guess** versions or dates — use data from the agents
 4. **New input fields are HIGH PRIORITY** — they require README, HOOKS-README, and presentation updates. Never dismiss them as "informational"
 5. **For new hooks, ALWAYS use `/workflows:workflow-add-hook`** — never manually add hooks
-6. **Cross-reference counts** — the same hook count must appear in: settings (x4), hooks.py, hooks-config.json, HOOKS-README.md, README.md badge, and presentation
+6. **Cross-reference counts** — the same hook count must appear in: settings (x4), hooks.py, hooks-config.json, HOOKS-README.md, README.md badge, and presentation. Also grep HOOKS-README for ALL prose-embedded count references (`\d+ hook`, `not all \d+`, `remaining \d+ hook`) — these get missed by structured checks.
 7. **Don't auto-execute** — always present the report first
 8. **Agent hooks** — this project supports 6 agent hooks (PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, SubagentStop). Not all 16 hooks fire in agent sessions.
 9. **ALWAYS append to changelog/changelog.md** — Phase 2.5 is mandatory. Never skip it. Never overwrite previous entries.

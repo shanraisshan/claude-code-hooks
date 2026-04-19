@@ -1,5 +1,5 @@
 # Claude Code Hooks
-[![Hooks](https://img.shields.io/badge/supports%20all-26%20hooks-white?style=flat&labelColor=555)](https://github.com/shanraisshan/claude-code-hooks/blob/main/.claude/hooks/HOOKS-README.md#hook-events-overview---official-26-hooks) [![Version](https://img.shields.io/badge/updated%20with%20Claude%20Code-v2.1.114%20(Apr%2019%2C%202026%2012:40%20PM%20PKT)-white?style=flat&labelColor=555)](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/shanraisshan/claude-code-hooks?style=flat&label=%E2%98%85&labelColor=555&color=white)](https://github.com/shanraisshan/claude-code-hooks)
+[![Hooks](https://img.shields.io/badge/supports%20all-27%20hooks-white?style=flat&labelColor=555)](https://github.com/shanraisshan/claude-code-hooks/blob/main/.claude/hooks/HOOKS-README.md#hook-events-overview---official-27-hooks) [![Version](https://img.shields.io/badge/updated%20with%20Claude%20Code-v2.1.108%20(Apr%2015%2C%202026%2012:47%20AM%20PKT)-white?style=flat&labelColor=555)](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md) [![Stars](https://img.shields.io/github/stars/shanraisshan/claude-code-hooks?style=flat&label=%E2%98%85&labelColor=555&color=white)](https://github.com/shanraisshan/claude-code-hooks)
 
 <p align="center">
   <img src="!/claude-speaking.svg" alt="Claude Code mascot speaking" width="168" height="108">
@@ -16,7 +16,10 @@
   <a href="presentation/index.html"><img src="!/pill-slides.svg" alt="Slides" height="36"></a>
 </p>
 
-[![thumbnail](!/thumbnail/thumbnail3.jpg)](https://youtu.be/6_y3AtkgjqA)
+<p>
+  <a href="https://youtu.be/MnpOsTEDzeY"><img src="!/thumbnail/video-2.jpg" alt="two-video" width="49%"></a>&nbsp;
+  <a href="https://youtu.be/6_y3AtkgjqA"><img src="!/thumbnail/video-1.jpg" alt="one-video" width="49%"></a>
+</p>
 
 ## Installation
 
@@ -48,6 +51,7 @@ new hook addition changelogs only
 
 | Date | Hooks | Changes | Claude Code Version | Demo |
 |------|:-----:|---------|:-------------------:|:----:|
+| Mar 31, 2026 | 27 | Added `PermissionDenied` | [v2.1.88](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2188) | |
 | Mar 26, 2026 | 26 | Added `TaskCreated` | [v2.1.84](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2184) | [Demo 4](https://youtu.be/MnpOsTEDzeY) |
 | Mar 25, 2026 | 25 | Added `CwdChanged`, `FileChanged` | [v2.1.83](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2183) | |
 | Mar 18, 2026 | 23 | Added `StopFailure` | [v2.1.78](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2178) | |

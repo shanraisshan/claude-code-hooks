@@ -34,34 +34,51 @@ Create a git commit with an auto-generated message. The first line is a summary,
 
 5. **Show the user** the proposed commit message (title + numbered list) and the files to stage. Ask for confirmation before committing.
 
-6. **Stage and commit**:
-   - Stage all relevant changed files (use `git add` with specific file paths — avoid `git add -A`)
-   - Commit using a HEREDOC for multi-line message
+6. **Stage and commit — one commit per file**:
+   - Create a **separate commit for each changed file** (per CLAUDE.md Git Commit Rules)
+   - Each commit message uses the same title line but includes only the change descriptions relevant to that file
+   - Stage one file at a time with `git add <file>`, then commit using a HEREDOC
+   - Format for each per-file commit:
+     ```
+     [/command-name][DD-Mon-YY HH:MM AM/PM] N changes
+
+     1. Change description relevant to this file
+     2. Another change relevant to this file
+     ```
+   - If a single change touches multiple files, include that change description in each relevant file's commit
 
 ## Example
 
-If `/commit workflows:workflow-changelog` is run after a session that executed 10 actions:
+If `/commit workflows:workflow-changelog` is run after a session that changed 3 files with 4 total actions:
 
+**Commit 1** (`git add README.md`):
 ```
-[/workflows:workflow-changelog][20-Feb-26 08:14 PM] 10 changes
+[/workflows:workflow-changelog][20-Feb-26 08:14 PM] 4 changes
+
+1. Updated version badge to v2.1.90
+```
+
+**Commit 2** (`git add .claude/hooks/scripts/hooks.py`):
+```
+[/workflows:workflow-changelog][20-Feb-26 08:14 PM] 4 changes
 
 1. Added stop_hook_active to Stop & SubagentStop Options
 2. Added source to ConfigChange & SessionStart Options
-3. Added reason to SessionEnd, trigger/custom_instructions to PreCompact
-4. Added teammate_name/team_name to TaskCompleted Options
-5. Removed stale workaround code block from HOOKS-README
-6. Fixed PreToolUseRejected typo to SessionStart, SessionEnd
-7. Updated presentation Slide 21 to show all 6 agent hooks
-8. Removed empty plans/ sound folder
-9. Added Decision Control Patterns and JSON Output Fields sections
-10. Fixed $CLAUDE_SESSION_ID to session_id (via stdin JSON)
+```
+
+**Commit 3** (`git add changelog/changelog.md`):
+```
+[/workflows:workflow-changelog][20-Feb-26 08:14 PM] 4 changes
+
+1. Appended v2.1.90 changelog entry
 ```
 
 ## Rules
 
-1. **Always show the commit message and file list** before committing — never auto-commit
-2. **Never stage sensitive files** (.env, credentials, secrets)
-3. **Use specific file paths** when staging — not `git add -A` or `git add .`
-4. **Do not push** unless the user explicitly asks
-5. **Changes = actions executed**, not files changed
-6. Keep each change description short (under 80 chars)
+1. **Always show the proposed commits** (per-file messages + file list) before committing — never auto-commit
+2. **One commit per file** — never bundle multiple files into a single commit
+3. **Never stage sensitive files** (.env, credentials, secrets)
+4. **Use specific file paths** when staging — not `git add -A` or `git add .`
+5. **Do not push** unless the user explicitly asks
+6. **"N changes" in the title = total actions executed** across the entire session, not per-file
+7. Keep each change description short (under 80 chars)

@@ -25,5 +25,6 @@
   "disableCwdChangedHook": false,
   "disableFileChangedHook": false,
   "disableTaskCreatedHook": false,
+  "disablePermissionDeniedHook": false,
   "disableLogging": true
 }

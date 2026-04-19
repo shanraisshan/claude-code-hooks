@@ -386,3 +386,76 @@
 | 4 | MEDIUM | Hook Options Table | Update PreCompact/PostCompact: `trigger` → `compact_trigger`, remove undocumented `custom_instructions`/`compact_summary` — per official docs | ✅ COMPLETE (updated HOOKS-README Options column and matcher table) |
 | 5 | MEDIUM | Can-Block Status | PostToolUse can-block — official docs confirm "No" (exit code 2 = feedback only, tool already ran). Updated presentation badge and summary list, removed from HOOKS-README Decision Control blocking group | ✅ COMPLETE (changed presentation badge to Cannot Block, removed from summary can-block list, updated Decision Control table) |
 | 6 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-03-31 07:03 PM PKT] Claude Code v2.1.88
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | HIGH | New Hook | `/workflows:workflow-add-hook PermissionDenied` — v2.1.88, fires after auto mode classifier denials; return `{retry: true}` to retry | ✅ COMPLETE (added to all 14 files — 27 hooks consistent across repo) |
+| 2 | HIGH | Not-in-Docs Table | Add PermissionDenied to HOOKS-README Not-in-Docs table; update Setup note to include PermissionDenied exclusion | ✅ COMPLETE (added row + updated Setup note to "25 hooks listed, Setup and PermissionDenied excluded") |
+| 3 | MEDIUM | Hook Options Table | Investigate CwdChanged field name: `old_cwd` vs `previous_cwd` — WebFetch extraction suggested `previous_cwd` but page was truncated | ❌ INVALID (false positive — official docs confirm `old_cwd` and `new_cwd`, HOOKS-README is correct) |
+| 4 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-01 10:58 AM PKT] Claude Code v2.1.89
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | MEDIUM | Config Drift | Fix HOOKS-README line 178: "not all 26" → "not all 27" (stale after PermissionDenied addition) | ✅ COMPLETE (updated to "not all 27") |
+| 2 | LOW | New Feature | Document PreToolUse "defer" permission decision (v2.1.89, headless resume) in HOOKS-README Decision Control table | ✋ ON HOLD (not yet in official docs pages — only in GitHub changelog; will document when docs update) |
+| 3 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-02 09:24 PM PKT] Claude Code v2.1.90
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | HIGH | Not-in-Docs Table | Remove PermissionDenied from HOOKS-README Not-in-Docs table — now confirmed in official hooks reference and guide; update Setup note from "(25 hooks listed, Setup and PermissionDenied excluded)" to "(26 hooks listed, Setup excluded)" | ✅ COMPLETE (removed PermissionDenied row, updated Setup note) |
+| 2 | HIGH | Hook Options Table | Add `tool_name`, `tool_input`, `tool_use_id`, `reason` to PermissionDenied Options column in HOOKS-README (confirmed by schema and official docs) | ✅ COMPLETE (added 4 input fields to Options column) |
+| 3 | HIGH | Matcher/Schema | Fix PermissionDenied matcher in HOOKS-README Per-Hook Matcher Reference — line 503 says "No matcher support" but official docs confirm tool_name matcher (same as PreToolUse/PostToolUse/PostToolUseFailure/PermissionRequest) | ✅ COMPLETE (updated to tool_name matcher with example) |
+| 4 | MEDIUM | New Feature | Document PreToolUse "defer" permission decision in HOOKS-README Decision Control table — now confirmed in official hooks guide and reference (v2.1.89, headless resume) | ✅ COMPLETE (added `defer` to PreToolUse permissionDecision values + added PermissionDenied retry row) |
+| 5 | MEDIUM | Can-Block Status | PermissionDenied can-block — official docs say "Cannot block but can signal retry" but presentation has "Can Block" badge and summary list includes it | ✅ COMPLETE (changed presentation badge to "Cannot Block", removed from summary can-block list) |
+| 6 | LOW | Config Drift | Fix HOOKS-README line 47 stale count: "Not all 26 hooks are supported" → "Not all 27 hooks are supported" | ✅ COMPLETE (updated to "Not all 27") |
+| 7 | LOW | Config Drift | Fix HOOKS-README line 186 stale count: "remaining 10 hooks" → "remaining 21 hooks" (27 - 6 = 21) | ✅ COMPLETE (updated to "remaining 21") |
+| 8 | MEDIUM | Workflow Fix | Root cause: workflow-add-hook only updates structured locations (heading, numbered list) but never sweeps for prose-embedded count references. Added Step 6 "Stale Count Sweep" to workflow-add-hook and Rule 7A/7B to verification checklist | ✅ COMPLETE (updated workflow-add-hook.md, workflow-changelog.md, and verification-checklist.md) |
+| 9 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-03 10:57 PM PKT] Claude Code v2.1.91
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-04 11:19 AM PKT] Claude Code v2.1.92
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | MEDIUM | Presentation | Fix PermissionDenied slide 31 stale text: remove "Not yet in official hooks reference — changelog and schema only" (now in official docs since v2.1.90 run confirmed) | ✅ COMPLETE (removed stale text from slide 31 line 2354) |
+| 2 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |
+
+---
+
+## [2026-04-14 11:38 PM PKT] Claude Code v2.1.107
+
+| # | Priority | Type | Action | Status |
+|---|----------|------|--------|--------|
+| 1 | HIGH | Can-Block Fix | PreCompact: change presentation badge from "Cannot Block" to "Can Block" (v2.1.105 changed can-block status) | ✅ COMPLETE (changed badge class and text on slide 15) |
+| 2 | HIGH | Can-Block Fix | Add PreCompact to presentation summary "Hooks That Can Block" list (lines 2589-2601) | ✅ COMPLETE (added PreCompact to summary list) |
+| 3 | HIGH | Decision Control | Add PreCompact to HOOKS-README Decision Control table — exit code 2 or `{"decision":"block"}` blocks compaction | ✅ COMPLETE (added row to Decision Control table) |
+| 4 | MEDIUM | Hook Options Table | Stop: add `stop_reason` input field to Options column (per official docs) | ✅ COMPLETE (added to Options column) |
+| 5 | MEDIUM | Hook Options Table | StopFailure: update `error`/`error_details` → `error_type`/`error_message` (per official docs) | ✅ COMPLETE (renamed fields in Options column) |
+| 6 | MEDIUM | Hook Options Table | ConfigChange: update `source` → `config_source` (per official docs) | ✅ COMPLETE (renamed in Options column + matcher table) |
+| 7 | MEDIUM | Hook Options Table | Elicitation: update `mcp_server_name` → `server_name`, `form_fields` → `elicitation_schema` (per official docs) | ✅ COMPLETE (renamed in Options column + matcher table) |
+| 8 | MEDIUM | Hook Options Table | ElicitationResult: update `mcp_server_name` → `server_name`, remove `form_fields` (per official docs) | ✅ COMPLETE (renamed + removed in Options column + matcher table) |
+| 9 | MEDIUM | Hook Options Table | WorktreeCreate: remove `worktree_name`/`base_branch`, add `isolation_reason` (per official docs) | ✅ COMPLETE (replaced fields in Options column) |
+| 10 | MEDIUM | Hook Options Table | WorktreeRemove: remove `worktree_name`, add `removal_reason` (per official docs) | ✅ COMPLETE (replaced field in Options column) |
+| 11 | MEDIUM | Hook Options Table | FileChanged: update `change_type` → `changed_reason` (per official docs) | ✅ COMPLETE (renamed in Options column) |
+| 12 | LOW | Agent Hook Docs | Re-test agent frontmatter hooks when upstream #27153 resolves | ✋ ON HOLD (recurring since 2026-02-20; upstream issue [#27153](https://github.com/anthropics/claude-code/issues/27153) still open) |

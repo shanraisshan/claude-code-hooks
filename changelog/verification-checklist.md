@@ -91,3 +91,14 @@ Meta-rules about the workflow verification process itself.
 | # | Category | Check | Depth | Compare Against | Added | Origin |
 |---|----------|-------|-------|-----------------|-------|--------|
 | 6A | Source Credibility Guard | Only flag items as drift if confirmed by official sources (hooks-reference page, hooks-guide page, GitHub changelog). Third-party blog sources may be outdated or wrong — use them for leads only, verify against official docs before flagging | content-match | official docs only | 2026-02-24 | Past runs produced false positives: OpenInEditor hook (2026-02-20), CLAUDE_HOOK_* env vars (2026-02-20), Windows relative path (2026-02-24) — all sourced from blogs, not official docs |
+
+---
+
+## 7. Embedded Count References
+
+Rules that catch stale numeric references embedded in prose text (not in structured headings/tables).
+
+| # | Category | Check | Depth | Compare Against | Added | Origin |
+|---|----------|-------|-------|-----------------|-------|--------|
+| 7A | HOOKS-README Prose Counts | Grep HOOKS-README for all patterns matching `\d+ hook`, `not all \d+`, `remaining \d+ hook`, `of \d+ hook` and verify each number matches the current total hook count (or the correct derived count, e.g. total - 6 for agent remaining count). These are embedded in prose text that structured count checks (Rule 3B) miss | content-match | current hook count vs all numeric references in HOOKS-README | 2026-04-02 | "Not all 26 hooks" (line 47) and "remaining 10 hooks" (line 186) survived 8+ hook additions because workflow-add-hook only updated structured locations (heading, numbered list) and no verification rule grepped for prose-embedded counts |
+| 7B | Not-in-Docs Table Accuracy | For each hook listed in HOOKS-README "Not in Official Docs" table, verify: (a) it is actually absent from official docs (remove if now present), (b) the "(N hooks listed, X excluded)" note in the Setup row matches the actual official docs hook count | content-match | hooks-reference page vs HOOKS-README Not-in-Docs table | 2026-04-02 | PermissionDenied was added to official docs but remained in Not-in-Docs table for 1+ runs; Setup note said "25 hooks listed, Setup and PermissionDenied excluded" when official docs actually listed 26 hooks (only Setup excluded) |

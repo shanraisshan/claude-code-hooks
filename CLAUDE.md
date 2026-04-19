@@ -1,6 +1,6 @@
 # Claude Code Hooks
 
-Sound notification system for all 26 Claude Code hooks. Plays sound effects when hook events fire.
+Sound notification system for all 27 Claude Code hooks. Plays sound effects when hook events fire.
 
 ## Project Structure
 
@@ -30,7 +30,7 @@ changelog/
 
 ## Critical: Hook Count Consistency
 
-The hook count (currently **26**) MUST match across ALL of these locations:
+The hook count (currently **27**) MUST match across ALL of these locations:
 - `.claude/settings.json` hook entries
 - `install/settings-mac.json`, `settings-linux.json`, `settings-windows.json`
 - `hooks.py` HOOK_SOUND_MAP keys + docstring count
@@ -47,7 +47,7 @@ When adding a hook, use `/workflows:workflow-add-hook` — it updates all 14 fil
 
 ## Agent Hooks
 
-Only **6 of 26** hooks fire in agent sessions: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, SubagentStop. These are mapped in `AGENT_HOOK_SOUND_MAP` in hooks.py.
+Only **6 of 27** hooks fire in agent sessions: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, SubagentStop. These are mapped in `AGENT_HOOK_SOUND_MAP` in hooks.py.
 
 ## Workflows
 
@@ -69,6 +69,17 @@ Only **6 of 26** hooks fire in agent sessions: PreToolUse, PostToolUse, Permissi
 
 Persistent memory file: `~/.claude/projects/-Users-shayanraees-Documents-Github-claude-code-hooks/memory/MEMORY.md`
 
+## Git Commit Rules
+
+When committing changes, **create separate commits per file**. Do NOT bundle multiple file changes into a single commit. Each file gets its own commit with a descriptive message specific to that file's changes.
+
+For example, if `README.md`, `.claude/hooks/scripts/hooks.py`, and `changelog/changelog.md` all changed:
+- Commit 1: `git add README.md` → commit with README-specific message
+- Commit 2: `git add .claude/hooks/scripts/hooks.py` → commit with hooks-script-specific message
+- Commit 3: `git add changelog/changelog.md` → commit with changelog-specific message
+
+This makes the git history cleaner and easier to review, revert, or cherry-pick individual changes.
+
 ## Schema Note
 
-`.claude/settings.json` is validated against Claude Code's bundled JSON schema. The schema's `propertyNames` enum may contain hidden/undocumented hooks not yet in the changelog. The workflow-changelog agent checks for these. As of v2.1.87, the schema has 26 hooks (all implemented in repo).
+`.claude/settings.json` is validated against Claude Code's bundled JSON schema. The schema's `propertyNames` enum may contain hidden/undocumented hooks not yet in the changelog. The workflow-changelog agent checks for these. As of v2.1.107, the schema has 27 hooks (all 27 implemented in repo).

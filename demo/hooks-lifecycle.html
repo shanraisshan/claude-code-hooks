@@ -169,6 +169,10 @@
         <div class="prompt-header"><span class="prompt-step">16. File change</span><div class="prompt-hooks"><span class="hook-tag">FileChanged</span></div></div>
         <div class="prompt-code"><div class="prompt-line"><span class="prompt-line-text"><span class="prefix">$</span> echo "X=1" >> .env</span><button class="copy-btn" onclick="copyLine(this)" title="Copy"></button></div><div class="prompt-line"><span class="prompt-line-text">Run in separate terminal; matcher configured</span></div></div>
       </div>
+      <div class="prompt-card" data-card-hooks="PermissionDenied">
+        <div class="prompt-header"><span class="prompt-step">17. Permission denied</span><div class="prompt-hooks"><span class="hook-tag">PermissionDenied</span></div></div>
+        <div class="prompt-code"><div class="prompt-line"><span class="prompt-line-text"><span class="prefix">></span> Run a denied tool in auto mode</span></div><div class="prompt-line"><span class="prompt-line-text">Fires when auto mode classifier denies a tool</span></div></div>
+      </div>
     </div>
   </div>
 
@@ -209,7 +213,7 @@
         <g class="n3"><ellipse cx="115" cy="42" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,115,42)"/><ellipse cx="125" cy="40" rx="3" ry="2.5" fill="#E07C4C" transform="rotate(-20,125,40)"/><rect x="117" y="26" width="2" height="16" fill="#E07C4C"/><rect x="127" y="24" width="2" height="16" fill="#E07C4C"/><rect x="117" y="26" width="12" height="2" fill="#E07C4C"/></g>
         <g class="cb"><rect class="le" x="22" y="10" width="8" height="14" fill="#E07C4C"/><rect class="re" x="70" y="10" width="8" height="14" fill="#E07C4C"/><rect x="18" y="24" width="64" height="4" fill="#E07C4C"/><rect x="14" y="28" width="72" height="32" fill="#E07C4C"/><rect x="30" y="34" width="8" height="10" fill="#000"/><rect x="62" y="34" width="8" height="10" fill="#000"/><rect class="mo" x="44" y="50" width="12" height="6" fill="#000"/><rect x="2" y="40" width="12" height="8" fill="#E07C4C"/><rect x="86" y="40" width="12" height="8" fill="#E07C4C"/><rect x="24" y="60" width="12" height="14" fill="#E07C4C"/><rect x="64" y="60" width="12" height="14" fill="#E07C4C"/></g>
       </svg>
-      <div class="right-branding-text"><strong>Claude Code Hooks</strong>26 supported</div>
+      <div class="right-branding-text"><strong>Claude Code Hooks</strong>27 supported</div>
     </div>
 
     <!-- Chart -->
@@ -240,6 +244,8 @@
         <g class="hook-group" data-hook="PreToolUse"><rect class="hook-rect" x="160" y="105" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="123" text-anchor="middle">PreToolUse</text><text class="fire-count" x="327" y="109" text-anchor="end"></text></g>
         <line class="arrow-line" x1="245" y1="133" x2="245" y2="141" marker-end="url(#ah)"/>
         <g class="hook-group" data-hook="PermissionRequest"><rect class="hook-rect" x="160" y="141" width="170" height="28" rx="5"/><text class="hook-text" x="245" y="159" text-anchor="middle">PermissionRequest</text><text class="fire-count" x="327" y="145" text-anchor="end"></text></g>
+        <g class="hook-group" data-hook="PermissionDenied"><rect class="hook-rect hook-rect-side" x="395" y="134" width="110" height="28" rx="5"/><text class="hook-text hook-text-side" x="450" y="146" text-anchor="middle">PermissionDenied</text><text class="hook-subtitle" x="450" y="156" text-anchor="middle">(Auto deny)</text><text class="fire-count" x="502" y="138" text-anchor="end"></text></g>
+        <line class="connector-dashed" x1="330" y1="155" x2="395" y2="148"/>
         <line class="arrow-line" x1="245" y1="169" x2="245" y2="177" marker-end="url(#ah)"/>
         <g><rect class="tool-rect" x="170" y="179" width="150" height="20" rx="4"/><text class="tool-text" x="245" y="193" text-anchor="middle" style="font-size:10px">[tool executes]</text></g>
         <line class="arrow-line" x1="245" y1="199" x2="245" y2="213" marker-end="url(#ah)"/>

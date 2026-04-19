@@ -1,7 +1,7 @@
 # HOOKS-README
 contains all the details, scripts, and instructions for the hooks
 
-## Hook Events Overview - [Official 26 Hooks](https://code.claude.com/docs/en/hooks)
+## Hook Events Overview - [Official 27 Hooks](https://code.claude.com/docs/en/hooks)
 Claude Code provides several hook events that run at different points in the workflow:
 
 | # | Hook | Description | Options |
@@ -12,7 +12,7 @@ Claude Code provides several hook events that run at different points in the wor
 | 4 | `PostToolUseFailure` | Runs after tool calls fail | `async`, `timeout: 5000`, `error`, `is_interrupt`, `tool_use_id` |
 | 5 | `UserPromptSubmit` | Runs when the user submits a prompt, before Claude processes it | `async`, `timeout: 5000`, `prompt` |
 | 6 | `Notification` | Runs when Claude Code sends notifications | `async`, `timeout: 5000`, `notification_type`, `message`, `title` |
-| 7 | `Stop` | Runs when Claude Code finishes responding | `async`, `timeout: 5000`, `last_assistant_message`, `stop_hook_active` |
+| 7 | `Stop` | Runs when Claude Code finishes responding | `async`, `timeout: 5000`, `stop_reason`, `last_assistant_message`, `stop_hook_active` |
 | 8 | `SubagentStart` | Runs when subagent tasks start | `async`, `timeout: 5000`, `agent_id`, `agent_type` |
 | 9 | `SubagentStop` | Runs when subagent tasks complete | `async`, `timeout: 5000`, `agent_id`, `agent_type`, `last_assistant_message`, `agent_transcript_path`, `stop_hook_active` |
 | 10 | `PreCompact` | Runs before Claude Code is about to run a compact operation | `async`, `timeout: 5000`, `once`, `compact_trigger` |
@@ -23,15 +23,16 @@ Claude Code provides several hook events that run at different points in the wor
 | 15 | `TeammateIdle` | Runs when a teammate agent becomes idle (experimental agent teams) | `async`, `timeout: 5000`, `teammate_name`, `team_name` |
 | 16 | `TaskCreated` | Runs when a task is being created via the TaskCreate tool (experimental agent teams) | `async`, `timeout: 5000`, `task_id`, `task_subject`, `task_description`, `teammate_name`, `team_name` |
 | 17 | `TaskCompleted` | Runs when a background task completes (experimental agent teams) | `async`, `timeout: 5000`, `task_id`, `task_subject`, `task_description`, `teammate_name`, `team_name` |
-| 18 | `ConfigChange` | Runs when a configuration file changes during a session | `async`, `timeout: 5000`, `file_path`, `source` |
-| 19 | `WorktreeCreate` | Runs when agent worktree isolation creates worktrees for custom VCS setup | `async`, `timeout: 5000`, `worktree_path`, `worktree_name`, `base_branch` |
-| 20 | `WorktreeRemove` | Runs when agent worktree isolation removes worktrees for custom VCS teardown | `async`, `timeout: 5000`, `worktree_path`, `worktree_name` |
+| 18 | `ConfigChange` | Runs when a configuration file changes during a session | `async`, `timeout: 5000`, `file_path`, `config_source` |
+| 19 | `WorktreeCreate` | Runs when agent worktree isolation creates worktrees for custom VCS setup | `async`, `timeout: 5000`, `worktree_path`, `isolation_reason` |
+| 20 | `WorktreeRemove` | Runs when agent worktree isolation removes worktrees for custom VCS teardown | `async`, `timeout: 5000`, `worktree_path`, `removal_reason` |
 | 21 | `InstructionsLoaded` | Runs when CLAUDE.md or `.claude/rules/*.md` files are loaded into context | `async`, `timeout: 5000`, `file_path`, `memory_type`, `load_reason`, `globs`, `trigger_file_path`, `parent_file_path` |
-| 22 | `Elicitation` | Runs when an MCP server requests user input during a tool call | `async`, `timeout: 5000`, `mcp_server_name`, `tool_name`, `form_fields` |
-| 23 | `ElicitationResult` | Runs after a user responds to an MCP elicitation, before the response is sent back to the server | `async`, `timeout: 5000`, `mcp_server_name`, `tool_name`, `user_response`, `form_fields` |
-| 24 | `StopFailure` | Runs when the turn ends due to an API error (rate limit, auth failure, etc.) | `async`, `timeout: 5000`, `error`, `error_details`, `last_assistant_message` |
+| 22 | `Elicitation` | Runs when an MCP server requests user input during a tool call | `async`, `timeout: 5000`, `server_name`, `tool_name`, `elicitation_schema` |
+| 23 | `ElicitationResult` | Runs after a user responds to an MCP elicitation, before the response is sent back to the server | `async`, `timeout: 5000`, `server_name`, `tool_name`, `user_response` |
+| 24 | `StopFailure` | Runs when the turn ends due to an API error (rate limit, auth failure, etc.) | `async`, `timeout: 5000`, `error_type`, `error_message`, `last_assistant_message` |
 | 25 | `CwdChanged` | Runs when the working directory changes during a session (reactive env management, e.g. direnv) | `async`, `timeout: 5000`, `old_cwd`, `new_cwd` |
-| 26 | `FileChanged` | Runs when watched files change during a session (reactive env management, e.g. direnv). **Requires `matcher` with pipe-separated basenames** (e.g. `.envrc\|.env`) to specify which files to watch | `async`, `timeout: 5000`, `file_path`, `change_type` |
+| 26 | `FileChanged` | Runs when watched files change during a session (reactive env management, e.g. direnv). **Requires `matcher` with pipe-separated basenames** (e.g. `.envrc\|.env`) to specify which files to watch | `async`, `timeout: 5000`, `file_path`, `changed_reason` |
+| 27 | `PermissionDenied` | Runs after auto mode classifier denies a tool call. Return `{retry: true}` to tell the model it can retry | `async`, `timeout: 5000`, `tool_name`, `tool_input`, `tool_use_id`, `reason` |
 
 > **Note:** Hooks 15-17 (`TeammateIdle`, `TaskCreated`, and `TaskCompleted`) require the experimental agent teams feature. Set `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` when launching Claude Code to enable them.
 
@@ -41,8 +42,8 @@ The following items exist in the [Claude Code Changelog](https://github.com/anth
 
 | Item | Added In | Changelog Reference | Notes |
 |------|----------|-------------------|-------|
-| `Setup` hook | [v2.1.10](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2110) | "Added new Setup hook event that can be triggered via `--init`, `--init-only`, or `--maintenance` CLI flags for repository setup and maintenance operations" | Not listed in official hooks reference page (25 hooks listed, Setup excluded) |
-| Agent frontmatter hooks | [v2.1.0](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#210) | "Added hooks support to agent frontmatter, allowing agents to define PreToolUse, PostToolUse, and Stop hooks scoped to the agent's lifecycle" | Changelog only mentions 3 hooks, but testing confirms **6 hooks** actually fire in agent sessions: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, SubagentStop. Not all 26 hooks are supported. |
+| `Setup` hook | [v2.1.10](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#2110) | "Added new Setup hook event that can be triggered via `--init`, `--init-only`, or `--maintenance` CLI flags for repository setup and maintenance operations" | Not listed in official hooks reference page (26 hooks listed, Setup excluded) |
+| Agent frontmatter hooks | [v2.1.0](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#210) | "Added hooks support to agent frontmatter, allowing agents to define PreToolUse, PostToolUse, and Stop hooks scoped to the agent's lifecycle" | Changelog only mentions 3 hooks, but testing confirms **6 hooks** actually fire in agent sessions: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, SubagentStop. Not all 27 hooks are supported. |
 
 ## Prerequisites
 
@@ -139,7 +140,8 @@ Edit `.claude/hooks/config/hooks-config.json` for team-wide defaults:
   "disableWorktreeRemoveHook": false,
   "disableInstructionsLoadedHook": false,
   "disableCwdChangedHook": false,
-  "disableFileChangedHook": false
+  "disableFileChangedHook": false,
+  "disablePermissionDeniedHook": false
 }
 ```
 
@@ -172,7 +174,7 @@ Claude Code 2.1.0 introduced support for agent-specific hooks defined in agent f
 
 ### Supported Agent Hooks
 
-Agent frontmatter hooks support **6 hooks** (not all 26). The changelog originally mentioned only 3, but testing confirms 6 hooks actually fire in agent sessions:
+Agent frontmatter hooks support **6 hooks** (not all 27). The changelog originally mentioned only 3, but testing confirms 6 hooks actually fire in agent sessions:
 - `PreToolUse`: Runs before the agent uses a tool
 - `PostToolUse`: Runs after the agent completes a tool use
 - `PermissionRequest`: Runs when a tool requires user permission
@@ -180,7 +182,7 @@ Agent frontmatter hooks support **6 hooks** (not all 26). The changelog original
 - `Stop`: Runs when the agent finishes
 - `SubagentStop`: Runs when a subagent completes
 
-> **Note:** The [v2.1.0 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#210) only mentions 3 hooks: *"Added hooks support to agent frontmatter, allowing agents to define PreToolUse, PostToolUse, and Stop hooks scoped to the agent's lifecycle"*. However, testing with the `claude-code-hook-agent` confirms that 6 hooks actually fire in agent sessions. The remaining 10 hooks (e.g., Notification, SessionStart, SessionEnd, etc.) do not fire in agent contexts.
+> **Note:** The [v2.1.0 changelog](https://github.com/anthropics/claude-code/blob/main/CHANGELOG.md#210) only mentions 3 hooks: *"Added hooks support to agent frontmatter, allowing agents to define PreToolUse, PostToolUse, and Stop hooks scoped to the agent's lifecycle"*. However, testing with the `claude-code-hook-agent` confirms that 6 hooks actually fire in agent sessions. The remaining 21 hooks (e.g., Notification, SessionStart, SessionEnd, etc.) do not fire in agent contexts.
 >
 > **Update (Feb 2026):** The [official hooks reference](https://code.claude.com/docs/en/hooks) now states *"All hook events are supported"* for skill/agent frontmatter hooks. This may mean support has expanded beyond the 6 hooks originally tested. Re-testing recommended to verify if additional hooks now fire in agent sessions.
 
@@ -378,7 +380,7 @@ Sends a prompt to a Claude model for single-turn evaluation. The model returns a
 }
 ```
 
-**Supported events:** PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, UserPromptSubmit, Stop, SubagentStop, TaskCreated, TaskCompleted. **Command-only events (not supported for prompt/agent types):** ConfigChange, CwdChanged, Elicitation, ElicitationResult, FileChanged, InstructionsLoaded, Notification, PostCompact, PreCompact, SessionEnd, SessionStart, Setup, StopFailure, SubagentStart, TeammateIdle, WorktreeCreate, WorktreeRemove.
+**Supported events:** PreToolUse, PostToolUse, PostToolUseFailure, PermissionRequest, UserPromptSubmit, Stop, SubagentStop, TaskCreated, TaskCompleted. **Command-only events (not supported for prompt/agent types):** ConfigChange, CwdChanged, Elicitation, ElicitationResult, FileChanged, InstructionsLoaded, Notification, PermissionDenied, PostCompact, PreCompact, SessionEnd, SessionStart, Setup, StopFailure, SubagentStart, TeammateIdle, WorktreeCreate, WorktreeRemove.
 
 ### `type: "agent"`
 
@@ -408,7 +410,7 @@ POSTs JSON to a URL and receives a JSON response, instead of running a shell com
 }
 ```
 
-**Not supported for:** ConfigChange, CwdChanged, Elicitation, ElicitationResult, FileChanged, InstructionsLoaded, Notification, PostCompact, PreCompact, SessionEnd, SessionStart, Setup, StopFailure, SubagentStart, TeammateIdle, WorktreeCreate, WorktreeRemove (command-only events). Headers support environment variable interpolation with `$VAR_NAME`, but only for variables explicitly listed in `allowedEnvVars`.
+**Not supported for:** ConfigChange, CwdChanged, Elicitation, ElicitationResult, FileChanged, InstructionsLoaded, Notification, PermissionDenied, PostCompact, PreCompact, SessionEnd, SessionStart, Setup, StopFailure, SubagentStart, TeammateIdle, WorktreeCreate, WorktreeRemove (command-only events). Headers support environment variable interpolation with `$VAR_NAME`, but only for variables explicitly listed in `allowedEnvVars`.
 
 ## Environment Variables
 
@@ -439,7 +441,7 @@ Every hook receives a JSON object on stdin containing these common fields, in ad
 | `agent_id` | string | Unique subagent identifier. Present when the hook fires inside a subagent context (since v2.1.69) |
 | `agent_type` | string | Agent type name (e.g. `Bash`, `Explore`, `Plan`, or custom). Present when using `--agent <name>` flag or inside a subagent (since v2.1.69) |
 
-> **Note:** Hook-specific fields (e.g., `tool_name` for PreToolUse, `last_assistant_message` for Stop) are listed in the Options column of the [Hook Events Overview](#hook-events-overview---official-26-hooks) table above.
+> **Note:** Hook-specific fields (e.g., `tool_name` for PreToolUse, `last_assistant_message` for Stop) are listed in the Options column of the [Hook Events Overview](#hook-events-overview---official-27-hooks) table above.
 
 ## Hooks Management Commands
 
@@ -482,9 +484,9 @@ Matchers filter which events trigger a hook. Not all hooks support matchers — 
 | `SessionEnd` | `reason` | `clear`, `resume`, `logout`, `prompt_input_exit`, `bypass_permissions_disabled`, `other` | `"matcher": "logout"` |
 | `PreCompact` | `compact_trigger` | `manual`, `auto` | `"matcher": "auto"` |
 | `PostCompact` | `compact_trigger` | `manual`, `auto` | `"matcher": "manual"` |
-| `Elicitation` | `mcp_server_name` | MCP server name | `"matcher": "my-mcp-server"` |
-| `ElicitationResult` | `mcp_server_name` | MCP server name | `"matcher": "my-mcp-server"` |
-| `ConfigChange` | `source` | `user_settings`, `project_settings`, `local_settings`, `policy_settings`, `skills` | `"matcher": "project_settings"` |
+| `Elicitation` | `server_name` | MCP server name | `"matcher": "my-mcp-server"` |
+| `ElicitationResult` | `server_name` | MCP server name | `"matcher": "my-mcp-server"` |
+| `ConfigChange` | `config_source` | `user_settings`, `project_settings`, `local_settings`, `policy_settings`, `skills` | `"matcher": "project_settings"` |
 | `UserPromptSubmit` | — | No matcher support | Always fires |
 | `Stop` | — | No matcher support | Always fires |
 | `TeammateIdle` | — | No matcher support | Always fires |
@@ -497,6 +499,7 @@ Matchers filter which events trigger a hook. Not all hooks support matchers — 
 | `CwdChanged` | — | No matcher support | Always fires |
 | `FileChanged` | `filename` (basename) | Pipe-separated basenames: `.envrc`, `.env`, `.env.local` | `"matcher": ".envrc\|.env"` |
 | `Setup` | — | No matcher support | Always fires |
+| `PermissionDenied` | `tool_name` | Tool names (same as PreToolUse) | `"matcher": "Bash"` |
 
 ## Known Issues & Workarounds
 
@@ -548,15 +551,17 @@ Different hooks use different output schemas for blocking or controlling executi
 
 | Hook(s) | Control Method | Values |
 |---------|---------------|--------|
-| PreToolUse | `hookSpecificOutput.permissionDecision` | `allow`, `deny`, `ask` |
+| PreToolUse | `hookSpecificOutput.permissionDecision` | `allow`, `deny`, `ask`, `defer` (headless `-p` mode only, v2.1.89+) |
 | PreToolUse | `hookSpecificOutput.autoAllow` | `true` — auto-approve future uses of this tool (since v2.0.76) |
 | PermissionRequest | `hookSpecificOutput.decision.behavior` | `allow`, `deny` |
 | Stop, SubagentStop, ConfigChange | Top-level `decision` | `block` |
+| PreCompact | `decision` + exit code 2 | `{"decision": "block"}` or exit code 2 — blocks compaction (since v2.1.105) |
 | TeammateIdle, TaskCreated, TaskCompleted | `continue` + exit code 2 | `{"continue": false, "stopReason": "..."}` — JSON decision control added in v2.1.70. TaskCreated also uses exit code 2 to block task creation (stderr fed back to model) |
 | UserPromptSubmit | Can modify `prompt` field | Returns modified prompt via stdout |
 | WorktreeCreate | Non-zero exit + stdout path | Non-zero exit fails creation; stdout provides worktree path |
 | Elicitation | `hookSpecificOutput.action` + `hookSpecificOutput.content` | `accept`, `decline`, `cancel` — control MCP elicitation response |
 | ElicitationResult | `hookSpecificOutput.action` + `hookSpecificOutput.content` | `accept`, `decline`, `cancel` — override user response before sending to server |
+| PermissionDenied | `hookSpecificOutput.retry` | `true` — signal that model may retry the denied tool call (v2.1.89+) |
 
 ### Universal JSON Output Fields
 

@@ -91,6 +91,12 @@ Add `"disable<HookEventName>Hook": false` **before** the `"disableLogging"` line
 - Add the hook to the numbered list with description from docs
 - Update the shared config JSON block with new `disable<HookEventName>Hook` entry
 - **If the hook is NOT listed in the [Official Hooks Reference](https://code.claude.com/docs/en/hooks)** (i.e. it only appears in the changelog), add a row to the "Not in Official Docs" table with the hook name, version, changelog quote, and a note that it's excluded from the official reference page
+- **CRITICAL — Sweep for stale counts:** After updating the heading, grep the ENTIRE file for every occurrence of the OLD hook count (e.g. if going from 26 to 27, search for `26 hooks`, `not all 26`, `remaining \d+ hooks`, `all 26`, `of 26`). Update ALL stale count references in prose text, including:
+  - The "Not in Official Docs" table notes (e.g. "(N hooks listed, Setup excluded)")
+  - The Agent Frontmatter section "Not all N" and "remaining N hooks" references
+  - Any cross-reference anchors containing the old count (e.g. `#official-N-hooks`)
+  - The hook type classification totals (supported + command-only must sum to new total)
+  - Run: `grep -n '\b<OLD_COUNT> hook' .claude/hooks/HOOKS-README.md` and `grep -n 'remaining [0-9]* hook' .claude/hooks/HOOKS-README.md` to find ALL instances
 
 ### `README.md`
 
@@ -184,7 +190,27 @@ Read `CLAUDE.md` at the project root and update any stale values:
 - `once: true` hook list (only if this hook uses `once: true`)
 - Slide count / `totalSlides`
 
-## Step 6: Verify
+## Step 6: Stale Count Sweep (MANDATORY)
+
+**After all file edits, run a global stale-count sweep.** This catches embedded count references that individual steps miss.
+
+```bash
+# Replace OLD and NEW with actual counts (e.g. 26 and 27)
+grep -rn '\bOLD hook' .claude/hooks/HOOKS-README.md
+grep -rn 'remaining [0-9]* hook' .claude/hooks/HOOKS-README.md
+grep -rn 'not all [0-9]*' .claude/hooks/HOOKS-README.md
+grep -rn 'of OLD hook\|of OLD\b' .claude/hooks/HOOKS-README.md presentation/index.html
+grep -rn 'OLD supported' demo/hooks-lifecycle.html
+```
+
+Fix every match. Common locations that get missed:
+- Not-in-Docs table notes: "(N hooks listed, Setup excluded)"
+- Agent Frontmatter section: "not all N", "remaining N hooks"
+- Cross-reference anchors: `#official-N-hooks`
+- Presentation "6 of N hooks" on agent slide
+- Demo lifecycle branding: "N supported"
+
+## Step 7: Verify
 
 **After all edits, re-read every modified file and confirm the new hook name appears.** This is critical — do NOT rely on the edit tool succeeding; grep each file for the hook name.
 

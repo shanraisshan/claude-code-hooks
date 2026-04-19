@@ -541,7 +541,7 @@
         </div>
         <h1>Claude Code Hooks</h1>
         <p class="subtitle">Explaining Claude Code Hooks and Subagent Hooks</p>
-        <p style="margin-top: 60px; font-size: 0.95rem; color: #888;">As of Claude Code v2.1.87 | March 29, 2026</p>
+        <p style="margin-top: 60px; font-size: 0.95rem; color: #888;">As of Claude Code v2.1.107 | April 15, 2026</p>
     </div>
 
     <!-- Slide 2: Introduction -->
@@ -558,8 +558,8 @@
             <div class="use-case-item">
                 <span class="use-case-icon">🔢</span>
                 <div class="use-case-text">
-                    <strong>26 Hooks Explained</strong>
-                    <span>Claude Code currently supports 26 hooks (as of v2.1.87)</span>
+                    <strong>27 Hooks Explained</strong>
+                    <span>Claude Code currently supports 27 hooks (as of v2.1.107)</span>
                 </div>
             </div>
             <div class="use-case-item">
@@ -580,7 +580,7 @@
                 <span class="use-case-icon">🔊</span>
                 <div class="use-case-text">
                     <strong>Voice Notifications Demo</strong>
-                    <span>This repo integrates all 26 hooks with audio feedback</span>
+                    <span>This repo integrates all 27 hooks with audio feedback</span>
                 </div>
             </div>
         </div>
@@ -596,8 +596,8 @@
 
     <!-- Slide 3: Table of Contents -->
     <div class="slide" data-slide="3">
-        <h1>The 26 Hooks</h1>
-        <p style="margin-top: -30px; margin-bottom: 24px; font-size: 1rem; color: #666;">Claude Code v2.1.87 | March 29, 2026 — More hooks may be added in future versions.</p>
+        <h1>The 27 Hooks</h1>
+        <p style="margin-top: -30px; margin-bottom: 24px; font-size: 1rem; color: #666;">Claude Code v2.1.107 | April 15, 2026 — More hooks may be added in future versions.</p>
 
         <div class="toc-list">
             <div class="toc-item" onclick="goToSlide(5)">
@@ -704,6 +704,10 @@
                 <span class="toc-number">26</span>
                 <span class="toc-name">FileChanged</span>
             </div>
+            <div class="toc-item" onclick="goToSlide(31)">
+                <span class="toc-number">27</span>
+                <span class="toc-name">PermissionDenied</span>
+            </div>
         </div>
     </div>
 
@@ -783,11 +787,12 @@
                     <span class="matcher-tag">Elicitation</span>
                     <span class="matcher-tag">ElicitationResult</span>
                     <span class="matcher-tag">StopFailure</span>
+                    <span class="matcher-tag">PermissionDenied</span>
                 </div>
             </div>
         </div>
 
-        <p style="margin-top: 24px;"><strong>Note:</strong> Setup fires separately via <code>--init</code>/<code>--maintenance</code> CLI flags. Notification, TeammateIdle, TaskCompleted, TaskCreated, ConfigChange, WorktreeCreate, WorktreeRemove, InstructionsLoaded, Elicitation, ElicitationResult, StopFailure, CwdChanged, and FileChanged hooks fire asynchronously at any point during the session — they are not part of the sequential flow above.</p>
+        <p style="margin-top: 24px;"><strong>Note:</strong> Setup fires separately via <code>--init</code>/<code>--maintenance</code> CLI flags. Notification, TeammateIdle, TaskCompleted, TaskCreated, ConfigChange, WorktreeCreate, WorktreeRemove, InstructionsLoaded, Elicitation, ElicitationResult, StopFailure, CwdChanged, FileChanged, and PermissionDenied hooks fire asynchronously at any point during the session — they are not part of the sequential flow above.</p>
     </div>
 
     <!-- Slide 5: SessionStart -->
@@ -1421,7 +1426,7 @@
         <div class="hook-title">
             <span class="hook-number">11</span>
             <span class="hook-name">PreCompact</span>
-            <span class="cannot-block">Cannot Block</span>
+            <span class="can-block">Can Block</span>
         </div>
 
         <div class="trigger-box">
@@ -2336,14 +2341,63 @@
         </div>
     </div>
 
-    <!-- Slide 31: Agent Hooks -->
+    <!-- Slide 31: PermissionDenied -->
     <div class="slide" data-slide="31">
+        <div class="hook-title">
+            <span class="hook-number">27</span>
+            <span class="hook-name">PermissionDenied</span>
+            <span class="cannot-block">Cannot Block</span>
+        </div>
+
+        <div class="trigger-box">
+            <h4>When It Triggers</h4>
+            <p>Fires after the auto mode classifier denies a tool call. Your hook can return <code>{retry: true}</code> to tell the model it can retry the operation. Introduced in v2.1.88.</p>
+        </div>
+
+        <div class="how-to-trigger">
+            <h4>How to Trigger</h4>
+            <p>A tool call is denied by the auto mode classifier:</p>
+            <div class="trigger-example">Auto mode denies tool → PermissionDenied hook fires</div>
+        </div>
+
+        <h3>Use Cases</h3>
+        <div class="use-cases">
+            <div class="use-case-item">
+                <span class="use-case-icon">🔊</span>
+                <div class="use-case-text">
+                    <strong>Voice: "Permission denied"</strong>
+                    <span>Audio alert when auto mode blocks a tool call</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">🔄</span>
+                <div class="use-case-text">
+                    <strong>Auto-Retry Logic</strong>
+                    <span>Return <code>{retry: true}</code> to let the model retry with a different approach</span>
+                </div>
+            </div>
+            <div class="use-case-item">
+                <span class="use-case-icon">📊</span>
+                <div class="use-case-text">
+                    <strong>Denial Tracking</strong>
+                    <span>Log denied tool calls for security auditing and permission tuning</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="sound-demo">
+            🔊 Sound: permissiondenied.wav — "Permission denied"
+        </div>
+    </div>
+
+    <!-- Slide 32: Agent Hooks -->
+    <div class="slide" data-slide="32">
         <h1>Agent Hooks (Bonus)</h1>
         <p>Claude Code 2.1.0 introduced support for agent-specific hooks defined in agent frontmatter files. These hooks only run within the agent's lifecycle.</p>
 
         <div class="trigger-box">
             <h4>Supported Agent Hooks</h4>
-            <p>Agent frontmatter hooks support <strong>6 of 26 hooks</strong>: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, and SubagentStop.</p>
+            <p>Agent frontmatter hooks support <strong>6 of 27 hooks</strong>: PreToolUse, PostToolUse, PermissionRequest, PostToolUseFailure, Stop, and SubagentStop.</p>
         </div>
 
         <div class="how-to-trigger">
@@ -2441,8 +2495,8 @@ hooks:
         </div>
     </div>
 
-    <!-- Slide 32: Configuration -->
-    <div class="slide" data-slide="32">
+    <!-- Slide 33: Configuration -->
+    <div class="slide" data-slide="33">
         <h1>Configuration</h1>
         <p>Hooks are configured in <code>.claude/settings.json</code> and can be individually enabled/disabled.</p>
 
@@ -2483,8 +2537,8 @@ hooks:
         </div>
     </div>
 
-    <!-- Slide 33: Summary -->
-    <div class="slide" data-slide="33">
+    <!-- Slide 34: Summary -->
+    <div class="slide" data-slide="34">
         <h1>Summary</h1>
 
         <div class="info-grid">
@@ -2510,6 +2564,7 @@ hooks:
                 <p><strong>UserPromptSubmit</strong> — Before processing prompt</p>
                 <p><strong>Notification</strong> — System alerts</p>
                 <p><strong>PermissionRequest</strong> — Permission dialogs</p>
+                <p><strong>PermissionDenied</strong> — Auto mode denial</p>
             </div>
             <div class="info-card">
                 <h4>Tool Execution</h4>
@@ -2539,6 +2594,7 @@ hooks:
             <span class="matcher-tag">TeammateIdle</span>
             <span class="matcher-tag">TaskCompleted</span>
             <span class="matcher-tag">TaskCreated</span>
+            <span class="matcher-tag">PreCompact</span>
             <span class="matcher-tag">ConfigChange</span>
             <span class="matcher-tag">WorktreeCreate</span>
             <span class="matcher-tag">Elicitation</span>
@@ -2604,7 +2660,7 @@ hooks:
         <button class="nav-btn" id="nextBtn" onclick="nextSlide()">→</button>
     </div>
 
-    <div class="slide-counter" id="slideCounter">1 / 33</div>
+    <div class="slide-counter" id="slideCounter">1 / 34</div>
 
     <div class="keyboard-hint">
         <kbd>←</kbd> <kbd>→</kbd> or <kbd>Space</kbd> to navigate
@@ -2612,7 +2668,7 @@ hooks:
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 33;
+        const totalSlides = 34;
 
         function showSlide(n) {
             const slides = document.querySelectorAll('.slide');
